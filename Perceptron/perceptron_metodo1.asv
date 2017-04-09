@@ -1,0 +1,124 @@
+function [Wf,Yf,N] = perceptron_metodo1(Wi,Xi,Yi,umbral);
+
+if length(Wi)~=size(Xi,1)
+    return;
+end
+
+if length(Wi)~=size(Xi,1)
+    return;
+end
+
+Wi
+Xi
+Yi
+
+%NUMERO DE ITERACIONES
+N=0;
+validador=0;
+
+k=length(Yi);
+coefIndex=length(Wi);
+
+while validador<k 
+N=N+1;
+    for i=1:1:k
+        %FUNCION DE SUMA
+        f(i)=0;
+        for j=1:1:coefIndex
+            f(i)=f(i)+Wi(j)*Xi(j,i);
+        end
+        %SE COMPARA CON EL UMBRAL
+        if f(i)<umbral
+            disp('DEBAJO DE UMBRAL') 
+            Yd(i)=-1;
+        else
+            Yd(i)=1;
+            
+        end
+        
+        %FUNCION DELTA
+        fd=1;
+        if Yd(i)==Yi(i)
+            validador=validador+1;   
+        else
+            %METODO 1
+            fd=Yd(i);
+            %AJUSTE DE COEFICIENTES
+            for j=1:1:coefIndex
+                Wi(j)=Wi(j)+Xi(j,i)*fd;
+                Wf=Wi;
+            end
+        end
+        
+    end
+end
+
+for i=1:1:k
+    Yf(i)=0;
+    for j=1:1:coefIndex
+        Yf(i)=Yf(i)+Wi(j)*Xi(j,i);
+    end
+end
+return
+
+%Se valida que los 4 valores estén correctos
+while validador <k 
+validador=0;
+N=N+1;
+
+for i=1:1:length(k)
+    f(i)=0;
+    for j=1:1:coefIndex
+        f(i)=f(i)+Wi(j)*X(i,j);
+    end
+    if f(i)<umbral
+        Yd(i)=-1;
+    else
+        Yd(i)=1;
+    end
+    
+    if Yd(i)==Yf(i)
+        validador=validador+1;   
+    else
+        %METODO 1
+        fd=Yd(i);
+    end
+    for j=1:1:coefIndex
+        Wi(j)=Wi(j)+X(i,j)*fd;        
+    end
+    
+end
+%     for i=1:1:4
+%       f(i)=x0*w0+x1(i)*w1+x2(i)*w2;
+%       disp(['f(',num2str(i),')=',num2str(w0),'*',num2str(x0),' + ',num2str(w1),'*',num2str(x1(i)),' + ',num2str(w2),'*',num2str(x2(i)),'=',num2str(f(i)),'=',num2str(f(i))]);
+%       
+%         d=2;
+%         if f(i)<d
+%           Sr(i)=-1;
+%         else
+%           Sr(i)=1;
+%         end
+%     
+%         if Sr(i)==Sd(i)
+%           %Si la salida resultante es igual a la deseada, se le suma uno al validador
+%           validador=validador+1;
+%         else
+%           %En caso contrario, se ajustan los pesos
+%           %METODO 1
+%           fd=Sd(i);
+%           %METODO 2
+%           fd=(Sd(i)-Sr(i));
+%           %METODO 3
+%           fd=0.1*(Sd(i)-Sr(i));
+%           
+%           
+%           Aw0=x0*fd
+%           Aw1=x1(i)*fd;
+%           Aw2=x2(i)*fd;
+%         
+%           w0=w0+Aw0;
+%           w1=w1+Aw1;
+%           w2=w2+Aw2;
+%     end
+% end
+end
