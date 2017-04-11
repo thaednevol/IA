@@ -40,7 +40,7 @@ validador=0;
             if Yd(i)==Yi(i)
                 validador=validador+1;   
             else
-                %METODO 1
+                %METODO 1: RED HEBB
                 fd=Yi(i);
                 %AJUSTE DE COEFICIENTES
                 for j=1:1:coefIndex

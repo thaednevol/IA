@@ -4,8 +4,8 @@
 %  aprendizaje de clasificación supervisado. Bajo las correctas
 %  suposiciones, el procedimiento de aprendizaje iterativo converge a los
 %  pesos correctos, es decir, a los pesos que permiten que la red produzca
-%  la salida deseada. Se analiza los diferentes métodos variando los pesos
-%  iniciales y la tasa de aprendizaje.
+%   la salida deseada. Se analiza los diferentes métodos variando los pesos
+%   iniciales y la tasa de aprendizaje.
 
 %% Definición del algoritmo base
 % 
