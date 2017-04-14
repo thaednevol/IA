@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>and2</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-10"><meta name="DC.source" content="and2.m"><style type="text/css">
+      --><title>Perceptr&oacute;n</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-13"><meta name="DC.source" content="and2.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,401 +66,572 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><pre class="codeinput">clear <span class="string">all</span>;
+  </style></head><body><div class="content"><h1>Perceptr&oacute;n</h1><!--introduction--><pre>An&aacute;lisis y desarrollo de los algoritmos del Perceptr&oacute;n, m&eacute;todo de
+aprendizaje de clasificaci&oacute;n supervisado. Bajo las correctas
+suposiciones, el procedimiento de aprendizaje iterativo converge a los
+pesos correctos, es decir, a los pesos que permiten que la red produzca
+la salida deseada. Se analiza los diferentes m&eacute;todos variando los pesos
+iniciales y la tasa de aprendizaje.</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Definici&oacute;n del algoritmo base</a></li><li><a href="#2">Desarrollo del algoritmo</a></li><li><a href="#15">Primer m&eacute;todo</a></li><li><a href="#17">Segundo m&eacute;todo</a></li><li><a href="#20">Tercer m&eacute;todo</a></li><li><a href="#23">An&aacute;lisis de los m&eacute;todos</a></li></ul></div><h2>Definici&oacute;n del algoritmo base<a name="1"></a></h2><pre>El algoritmo usado es el siguiente:</pre><div><ol><li>Se ingresan las entradas</li><li>Se ingresan las salidas</li><li>Se definen los pesos (se ingresan o se generan aleatoriamente)</li><li>Se define el umbral y la tasa de aprendizaje, si es necesario</li><li>Se calcula la salida a partir de la ecuaci&oacute;n lineal para la fila   seleccionada</li><li>Se compara esa salida con el umbral para la definci&oacute;n de la salida   para comparar</li><li>Se compara la salida del punto 6 con la salida que se ingres&oacute; en el   punto 2. Si no son iguales, se ajustan los pesos de acuerdo al m&eacute;todo.   Si son iguales, se acepta ese peso</li><li>Se contin&uacute;a con la siguiente fila y se dirige al paso 5</li></ol></div><h2>Desarrollo del algoritmo<a name="2"></a></h2><pre>El primer paso opcional es borrar todas las variables anteriores y
+limpiar el espacio de trabajo</pre><pre class="codeinput">clear <span class="string">all</span>;
 close <span class="string">all</span>;
 clc;
-
-<span class="comment">%ANALISIS</span>
-<span class="comment">%1. POR METODOS (PESOS FIJOS IGUALES PARA LOS TRES MODELOS)</span>
-<span class="comment">%Cual tiene mas iteraciones</span>
-<span class="comment">%Cual se demora mas</span>
-<span class="comment">%Cual tiene mas variacion de peso</span>
-<span class="comment">%2. METODO 3 (VARIAR ALFA)</span>
-<span class="comment">%Seleccionar alfa mas optimo</span>
-<span class="comment">%   Mas r&#65533;pido</span>
-<span class="comment">%   Cual tiene mas variacion de peso</span>
-<span class="comment">%   Cual tiene mas iteraciones</span>
-<span class="comment">%3 Implementar alfa adaptativo</span>
-
-w0=rand;
+</pre><pre>Se definen los pesos. Para evaluar el algoritmo se debe usar en
+principio pesos conocidos y luego, cuando se asegura que este funcione,
+se asignan valores aleatorios.</pre><pre class="codeinput">w0=rand;
 w1=rand;
 w2=rand;
 
 Wi=[w0 w1 w2];
-Yi=[-1 -1 -1 1];
-x0=[1 1 1 1];
+</pre><pre>A continuaci&oacute;n se definen las entradas</pre><pre class="codeinput">x0=[1 1 1 1];
 x1=[0 0 1 1];
 x2=[0 1 0 1];
 
 Xi = [x0;x1;x2];
+</pre><pre>Se definen las salidas</pre><pre class="codeinput">Yi=[-1 -1 -1 1];
+</pre><p>Por &uacute;ltimo, se define un umbral, que es el que define qu&eacute; valor es considerado como cero o como uno</p><pre class="codeinput">umbral=2;
+</pre><pre>Y luego se eval&uacute;a mediante las funciones del perceptron:</pre><pre class="codeinput">[Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
+</pre><p><i>perceptron_metodo1</i> es uno de los m&eacute;todos usados para calcular una ecuaci&oacute;n basada en el perceptr&oacute;n. Otros m&eacute;todos usados son el <i>perceptron_metodo2</i> y <i>perceptron_metodo3</i>, mostrados al final. Por motivos pr&aacute;cticos, se mostrar&aacute; la salida de este algoritmo, para luego hacer un an&aacute;lisis de cada uno de ellos.</p><p>Entonces, al ejecutar el algoritmo, la salida se muestra en la figura.</p><pre class="codeinput"> X1=0:0.01:3;
+ X2=(-Wf(2)/Wf(3))*X1-(Wf(1)/Wf(3))+(umbral/Wf(3));
+ plot(X1,X2)
+ hold <span class="string">on</span>
+ grid <span class="string">on</span>
 
-umbral=2;
+ <span class="keyword">for</span> j=1:1:4
+ <span class="keyword">if</span> Yi(j)==1
+     plot(Xi(2,j),Xi(3,j),<span class="string">'--gs'</span>)
+ <span class="keyword">else</span>
+     plot(Xi(2,j),Xi(3,j),<span class="string">'--rs'</span>)
+ <span class="keyword">end</span>
+ <span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="and2_01.png" alt=""> <h2>Primer m&eacute;todo<a name="15"></a></h2><p>En este primer m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a las salidas <a href="include&gt;perceptron_metodo1.m</include">include&gt;perceptron_metodo1.m&lt;/include</a></p><h2>Segundo m&eacute;todo<a name="17"></a></h2><p>En este segundo m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a la diferencia de las salidas y las entradas</p><pre class="language-matlab">
+<span class="keyword">function</span> [Wf,Yf,N] = perceptron_metodo2(Wi,Xi,Yi,umbral);
 
-Wi
-Xi
-Yi
-[Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
-Wf
-Yf
-N
-
-X1=0:0.01:3;
-X2=(-Wf(2)/Wf(3))*X1-(Wf(1)/Wf(3))+(umbral/Wf(3));
-plot(X1,X2)
-hold <span class="string">on</span>
-grid <span class="string">on</span>
-
-<span class="keyword">for</span> j=1:1:4
-<span class="keyword">if</span> Yi(j)==1
-    plot(Xi(2,j),Xi(3,j),<span class="string">'--gs'</span>)
-<span class="keyword">else</span>
-    plot(Xi(2,j),Xi(3,j),<span class="string">'--rs'</span>)
-<span class="keyword">end</span>
+<span class="keyword">if</span> length(Wi)~=size(Xi,1)
+    <span class="keyword">return</span>;
 <span class="keyword">end</span>
 
-<span class="keyword">return</span>;
-
-
-
-
-
-
-<span class="keyword">for</span> conjunto=1:1:3
-
-<span class="comment">% Definicion de los pesos iniciales</span>
-w0=rand;
-w1=rand;
-w2=rand;
-
-<span class="comment">% Se guardan los pesos iniciales</span>
-w0i=w0;
-w1i=w1;
-w2i=w2;
-
-<span class="comment">%Se define la tabla de verdad</span>
-x0=1;
-x1=[0 0 1 1];
-x2=[0 1 0 1];
-Sd=[-1 -1 -1 1];
-
-<span class="comment">%Imprime la tabla de verdad</span>
-disp(<span class="string">'----------------------------------------------------------'</span>)
-disp(<span class="string">'Tabla de verdad para AND:'</span>)
-disp([<span class="string">'x1 x2 sd'</span>]);
-<span class="keyword">for</span> i=1:1:4
-    disp([num2str(x1(i)),<span class="string">' '</span>,num2str(x2(i)),<span class="string">' '</span>,num2str(Sd(i))]);
+<span class="keyword">if</span> length(Wi)~=size(Xi,1)
+    <span class="keyword">return</span>;
 <span class="keyword">end</span>
 
-intentos=0;
+<span class="comment">%NUMERO DE ITERACIONES</span>
+N=0;
+<span class="comment">%NUMERO DE SALIDAS</span>
+k=length(Yi);
+
+<span class="comment">%NUMERO DE ENTRADAS O COEFICIENTES</span>
+coefIndex=length(Wi);
+
+<span class="comment">%VALIDADOR DEL ALGORITMO</span>
 validador=0;
 
-<span class="comment">%Se valida que los 4 valores est&#65533;n correctos</span>
-<span class="keyword">while</span> validador &lt; 4
-validador=0;
-intentos=intentos+1;
-    <span class="keyword">for</span> i=1:1:4
-      f(i)=x0*w0+x1(i)*w1+x2(i)*w2;
-      disp([<span class="string">'f('</span>,num2str(i),<span class="string">')='</span>,num2str(w0),<span class="string">'*'</span>,num2str(x0),<span class="string">' + '</span>,num2str(w1),<span class="string">'*'</span>,num2str(x1(i)),<span class="string">' + '</span>,num2str(w2),<span class="string">'*'</span>,num2str(x2(i)),<span class="string">'='</span>,num2str(f(i)),<span class="string">'='</span>,num2str(f(i))]);
+    <span class="keyword">while</span> validador&lt;k 
+    validador=0;
+    N=N+1;
+        <span class="keyword">for</span> i=1:1:k
+            <span class="comment">%FUNCION DE SUMA</span>
+            f(i)=0;
+            <span class="keyword">for</span> j=1:1:coefIndex
+                f(i)=f(i)+Wi(j)*Xi(j,i);
+            <span class="keyword">end</span>
+            <span class="comment">%SE COMPARA CON EL UMBRAL</span>
+            <span class="keyword">if</span> f(i)&lt;umbral
+                Yd(i)=-1;
+            <span class="keyword">else</span>
+                Yd(i)=1;
+            <span class="keyword">end</span>
 
-        d=2;
-        <span class="keyword">if</span> f(i)&lt;d
-          Sr(i)=-1;
-        <span class="keyword">else</span>
-          Sr(i)=1;
+            <span class="comment">%FUNCION DELTA</span>
+            fd=1;
+            <span class="keyword">if</span> Yd(i)==Yi(i)
+                validador=validador+1;   
+            <span class="keyword">else</span>
+                <span class="comment">%METODO 2</span>
+                fd=(Yi(i)-Yd(i));
+                <span class="comment">%AJUSTE DE COEFICIENTES</span>
+                <span class="keyword">for</span> j=1:1:coefIndex
+                    Wi(j)=Wi(j)+Xi(j,i)*fd;
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            Wf=Wi;
         <span class="keyword">end</span>
-
-        <span class="keyword">if</span> Sr(i)==Sd(i)
-          <span class="comment">%Si la salida resultante es igual a la deseada, se le suma uno al validador</span>
-          validador=validador+1;
-        <span class="keyword">else</span>
-          <span class="comment">%En caso contrario, se ajustan los pesos</span>
-          <span class="comment">%METODO 1</span>
-          fd=Sd(i);
-          <span class="comment">%METODO 2</span>
-          fd=(Sd(i)-Sr(i));
-          <span class="comment">%METODO 3</span>
-          fd=0.1*(Sd(i)-Sr(i));
-
-
-          Aw0=x0*fd
-          Aw1=x1(i)*fd;
-          Aw2=x2(i)*fd;
-
-          w0=w0+Aw0;
-          w1=w1+Aw1;
-          w2=w2+Aw2;
+    <span class="keyword">end</span>
+    <span class="comment">%INGRESA LA SALIDA A LA SOLUCION</span>
+    <span class="keyword">for</span> i=1:1:k
+        Yf(i)=0;
+        <span class="keyword">for</span> j=1:1:coefIndex
+            Yf(i)=Yf(i)+Wi(j)*Xi(j,i);
+        <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
+
+</pre><h2>Tercer m&eacute;todo<a name="20"></a></h2><p>En este tercer m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a la diferencia de las salidas y las entradas, multiplicadas por una coeficiente de aprendizaje alfa</p><pre class="language-matlab">
+<span class="keyword">function</span> [Wf,Yf,N] = perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+
+<span class="keyword">if</span> length(Wi)~=size(Xi,1)
+    <span class="keyword">return</span>;
 <span class="keyword">end</span>
 
-disp(<span class="string">'----------------------------------------------------------'</span>)
-disp(<span class="string">'Los pesos iniciales son:'</span>)
-disp([<span class="string">'w0: '</span>,num2str(w0i)])
-disp([<span class="string">'w1: '</span>,num2str(w1i)])
-disp([<span class="string">'w2: '</span>,num2str(w2i)])
-disp(<span class="string">'----------------------------------------------------------'</span>)
-disp(<span class="string">'Los pesos finales son:'</span>)
-disp([<span class="string">'w0: '</span>,num2str(w0)])
-disp([<span class="string">'w1: '</span>,num2str(w1)])
-disp([<span class="string">'w2: '</span>,num2str(w2)])
-disp(<span class="string">'----------------------------------------------------------'</span>)
-disp(<span class="string">'----------------------------------------------------------'</span>)
-disp([<span class="string">'El numero de Interacciones necesarias son:'</span>,num2str(intentos)])
-disp(<span class="string">'----------------------------------------------------------'</span>)
-
-X1=0:0.01:3;
-X2=(-w1/w2)*X1-(w0/w2)+(d/w2);
-plot(X1,X2)
-hold <span class="string">on</span>
-grid <span class="string">on</span>
-
-
-<span class="keyword">for</span> j=1:1:4
-<span class="keyword">if</span> Sd(j)==1
-    plot(x1(j),x2(j),<span class="string">'--gs'</span>)
-<span class="keyword">else</span>
-    plot(x1(j),x2(j),<span class="string">'--rs'</span>)
-<span class="keyword">end</span>
+<span class="keyword">if</span> length(Wi)~=size(Xi,1)
+    <span class="keyword">return</span>;
 <span class="keyword">end</span>
 
-indice=conjunto+1;
+<span class="comment">%NUMERO DE ITERACIONES</span>
+N=0;
+<span class="comment">%NUMERO DE SALIDAS</span>
+k=length(Yi);
 
-simulacion(indice,1)=conjunto;
-simulacion(indice,2)=w0i;
-simulacion(indice,3)=w1i;
-simulacion(indice,4)=w2i;
+<span class="comment">%NUMERO DE ENTRADAS O COEFICIENTES</span>
+coefIndex=length(Wi);
 
-simulacion(indice,5)=w0;
-simulacion(indice,6)=w1;
-simulacion(indice,7)=w2;
+<span class="comment">%VALIDADOR DEL ALGORITMO</span>
+validador=0;
 
-simulacion(indice,8)=intentos;
+    <span class="keyword">while</span> validador&lt;k 
+    validador=0;
+    N=N+1;
+        <span class="keyword">for</span> i=1:1:k
+            <span class="comment">%FUNCION DE SUMA</span>
+            f(i)=0;
+            <span class="keyword">for</span> j=1:1:coefIndex
+                f(i)=f(i)+Wi(j)*Xi(j,i);
+            <span class="keyword">end</span>
+            <span class="comment">%SE COMPARA CON EL UMBRAL</span>
+            <span class="keyword">if</span> f(i)&lt;umbral
+                Yd(i)=-1;
+            <span class="keyword">else</span>
+                Yd(i)=1;
+            <span class="keyword">end</span>
 
+            <span class="comment">%FUNCION DELTA</span>
+            fd=1;
+            <span class="keyword">if</span> Yd(i)==Yi(i)
+                validador=validador+1;   
+            <span class="keyword">else</span>
+                <span class="comment">%METODO 3</span>
+                fd=alpha*(Yi(i)-Yd(i));
+                <span class="comment">%AJUSTE DE COEFICIENTES</span>
+                <span class="keyword">for</span> j=1:1:coefIndex
+                    Wi(j)=Wi(j)+Xi(j,i)*fd;
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            Wf=Wi;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="comment">%INGRESA LA SALIDA A LA SOLUCION</span>
+    <span class="keyword">for</span> i=1:1:k
+        Yf(i)=0;
+        <span class="keyword">for</span> j=1:1:coefIndex
+            Yf(i)=Yf(i)+Wi(j)*Xi(j,i);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
 <span class="keyword">end</span>
 
-colNames={<span class="string">'Experimento'</span>,<span class="string">'Peso inicial w0'</span>,<span class="string">'Peso inicial w1'</span>,<span class="string">'Peso inicial w2'</span>,<span class="string">'Peso final w0'</span>,<span class="string">'Peso final w1'</span>,<span class="string">'Peso final w2'</span>,<span class="string">'No intentos'</span>};
+</pre><h2>An&aacute;lisis de los m&eacute;todos<a name="23"></a></h2><p>Para hacer una comparativa de los algoritmos, el enfoque usado es analizar el tercer algoritmo en b&uacute;squeda de ciertas variables adecuadas con determinados coeficientes de aprendizaje para obtener con cual alfa se tiene una respuesta m&aacute;s r&aacute;pida, cual tiene m&aacute;s variaci&oacute;n de peso y cual tiene mas iteraciones.</p><p>El primer enfoque ser&aacute; medir el tiempo promedio de diferentes coeficientes</p><pre class="codeinput"> j=1;
+ <span class="keyword">for</span> alpha=0.1:0.1:10
+     t=0;
+     <span class="keyword">for</span> i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
-<span class="keyword">for</span> i=1:size(simulacion,1)
-    row{i} = [<span class="string">''</span>];
-<span class="keyword">end</span>
+        Wi=[w0 w1 w2];
+        tic
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        t=t+toc;
+     <span class="keyword">end</span>
+     alphas(j)=t;
+     j=j+1;
+ <span class="keyword">end</span>
 
-<span class="comment">%dispmat(simulacion,'AND',row,colNames)</span>
-</pre><pre class="codeoutput">
-Wi =
+ figure
+ alpha=0.1:0.1:10;
+ plot(alpha,alphas)
+ title(<span class="string">'Tiempo usado por el m&eacute;todo 3'</span>)
+ xlabel(<span class="string">'alpha'</span>) <span class="comment">% x-axis label</span>
+ ylabel(<span class="string">'Tiempo en ms'</span>)
+ hold <span class="string">on</span>
+ grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="and2_02.png" alt=""> <p>Como se puede ver, no se aprecia una diferencia significativa. El siguiente m&eacute;todo contempla el n&uacute;mero de iteraciones.</p><pre class="codeinput"> j=1;
+ <span class="keyword">for</span> alpha=0.1:0.1:10
+     n_iter=0;
+     <span class="keyword">for</span> i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
-    0.9134    0.6324    0.0975
+        Wi=[w0 w1 w2];
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        n_iter=n_iter+N;
+     <span class="keyword">end</span>
+     alphas(j)=n_iter;
+     j=j+1;
+ <span class="keyword">end</span>
 
+ figure
+ alpha=0.1:0.1:10;
+ plot(alpha,alphas)
+ title(<span class="string">'Numero de iteraciones promedio por el m&eacute;todo 3'</span>)
+ xlabel(<span class="string">'alpha'</span>) <span class="comment">% x-axis label</span>
+ ylabel(<span class="string">'Iteraciones'</span>)
+ hold <span class="string">on</span>
+ grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="and2_03.png" alt=""> <p>Como se puede apreciar, no hay una diferencia significativa antes de 1, por lo que se vuelve a analizar, esta vez de 0 a 1.</p><pre class="codeinput"> j=1;
+ maxIter=500;
+ <span class="keyword">for</span> alpha=0.01:0.01:1
+     n_iter=0;
+     <span class="keyword">for</span> i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
-Xi =
+        Wi=[w0 w1 w2];
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        n_iter=n_iter+N;
+     <span class="keyword">end</span>
+     alphas(j)=n_iter;
 
-     1     1     1     1
-     0     0     1     1
-     0     1     0     1
+     <span class="comment">%Para encontrar el valor de alpha con el menor n&uacute;mero de iteraciones</span>
+     <span class="keyword">if</span> alphas(j)&lt;maxIter
+         alphaMin=alpha;
+         maxIter=alphas(j);
+     <span class="keyword">end</span>
+     j=j+1;
+ <span class="keyword">end</span>
 
+ figure
+ alpha=0.01:0.01:1;
+ plot(alpha,alphas)
+ title(<span class="string">'Numero de iteraciones promedio por el m&eacute;todo 3'</span>)
+ xlabel(<span class="string">'alpha'</span>) <span class="comment">% x-axis label</span>
+ ylabel(<span class="string">'Iteraciones'</span>)
+ hold <span class="string">on</span>
+ grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="and2_04.png" alt=""> <p>Usando este an&aacute;lisis, se encuentra un alpha que entrega un n&uacute;mero de iteraciones muy peque&ntilde;o entre 0.14 y 0.18.</p><p>Por &uacute;ltimo, se har&aacute; el an&aacute;lisis con la diferencia de pesos mas peque&ntilde;a y m&aacute;s grande</p><pre class="codeinput"> j=1;
+ <span class="keyword">for</span> alpha=0.01:0.01:1
+     <span class="keyword">for</span> i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
-Yi =
+        Wi=[w0 w1 w2];
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        dW=Wf(1)-Wi(1);
+     <span class="keyword">end</span>
+     alphas(j)=dW;
+     j=j+1;
+ <span class="keyword">end</span>
 
-    -1    -1    -1     1
+ figure
+ alpha=0.01:0.01:1;
+ plot(alpha,alphas)
+ title(<span class="string">'Numero de iteraciones promedio por el m&eacute;todo 3'</span>)
+ xlabel(<span class="string">'alpha'</span>) <span class="comment">% x-axis label</span>
+ ylabel(<span class="string">'Iteraciones'</span>)
+ hold <span class="string">on</span>
+ grid <span class="string">on</span>
 
+ <span class="keyword">return</span>;
 
-Wf =
+ el <span class="string">enfoque</span> <span class="string">usado</span> <span class="string">es</span> <span class="string">el</span> <span class="string">promedio</span>
+ <span class="comment">% de cada uno de las variables a evaluar sobre 100 muestras. Las variables</span>
+ <span class="comment">% que se van a comparar son el n&uacute;mero de iteraciones, la duraci&oacute;n de cada</span>
+ <span class="comment">% algoritmo y la variaci&oacute;n de cada peso.</span>
 
-   -1.0866    2.6324    1.0975
+ NiM1=0; <span class="comment">%Numero de iteraciones del m&eacute;todo 1</span>
+ NiM2=0; <span class="comment">%Numero de iteraciones del m&eacute;todo 3</span>
+ NiM3=0; <span class="comment">%Numero de iteraciones del m&eacute;todo 4</span>
 
+ <span class="keyword">for</span> i=1:1:100
+    w0=rand;
+    w1=rand;
+    w2=rand;
 
-Yf =
-
-   -1.0866    0.0109    1.5457    2.6433
-
-
-N =
-
-     7
-
-</pre><img vspace="5" hspace="5" src="and2_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+    Wi=[w0 w1 w2];
+    [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
+    NiM2=NiM2+N;
+    [Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
+    NiM1=NiM1+N;
+ <span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="and2_05.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
+%%  Perceptrón
+%
+%  Análisis y desarrollo de los algoritmos del Perceptrón, método de
+%  aprendizaje de clasificación supervisado. Bajo las correctas
+%  suposiciones, el procedimiento de aprendizaje iterativo converge a los
+%  pesos correctos, es decir, a los pesos que permiten que la red produzca
+%  la salida deseada. Se analiza los diferentes métodos variando los pesos
+%  iniciales y la tasa de aprendizaje.
+
+%% Definición del algoritmo base
+%
+%  El algoritmo usado es el siguiente:
+%
+% # Se ingresan las entradas
+% # Se ingresan las salidas
+% # Se definen los pesos (se ingresan o se generan aleatoriamente)
+% # Se define el umbral y la tasa de aprendizaje, si es necesario
+% # Se calcula la salida a partir de la ecuación lineal para la fila
+%   seleccionada
+% # Se compara esa salida con el umbral para la definción de la salida
+%   para comparar
+% # Se compara la salida del punto 6 con la salida que se ingresó en el
+%   punto 2. Si no son iguales, se ajustan los pesos de acuerdo al método.
+%   Si son iguales, se acepta ese peso
+% # Se continúa con la siguiente fila y se dirige al paso 5
+%
+%% Desarrollo del algoritmo
+%
+%  El primer paso opcional es borrar todas las variables anteriores y
+%  limpiar el espacio de trabajo
+
 clear all;
 close all;
 clc;
 
-%ANALISIS
-%1. POR METODOS (PESOS FIJOS IGUALES PARA LOS TRES MODELOS)
-%Cual tiene mas iteraciones
-%Cual se demora mas
-%Cual tiene mas variacion de peso
-%2. METODO 3 (VARIAR ALFA)
-%Seleccionar alfa mas optimo
-%   Mas r�pido
-%   Cual tiene mas variacion de peso
-%   Cual tiene mas iteraciones
-%3 Implementar alfa adaptativo
-
+%%
+%  Se definen los pesos. Para evaluar el algoritmo se debe usar en
+%  principio pesos conocidos y luego, cuando se asegura que este funcione,
+%  se asignan valores aleatorios.
+%%
 w0=rand;
 w1=rand;
 w2=rand;
 
 Wi=[w0 w1 w2];
-Yi=[-1 -1 -1 1];
+
+%%
+%  A continuación se definen las entradas
+%%
+
 x0=[1 1 1 1];
 x1=[0 0 1 1];
 x2=[0 1 0 1];
 
 Xi = [x0;x1;x2];
 
+%%
+%  Se definen las salidas
+%%
+
+Yi=[-1 -1 -1 1];
+
+%%
+% Por último, se define un umbral, que es el que define qué valor es
+% considerado como cero o como uno
+%%
+
 umbral=2;
 
-Wi
-Xi
-Yi
-[Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
-Wf
-Yf
-N
+%%
+%  Y luego se evalúa mediante las funciones del perceptron:
+%%
 
-X1=0:0.01:3;
-X2=(-Wf(2)/Wf(3))*X1-(Wf(1)/Wf(3))+(umbral/Wf(3));
-plot(X1,X2)
-hold on
-grid on
+[Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral); 
 
-for j=1:1:4
-if Yi(j)==1
-    plot(Xi(2,j),Xi(3,j),'REPLACE_WITH_DASH_DASHgs')
-else
-    plot(Xi(2,j),Xi(3,j),'REPLACE_WITH_DASH_DASHrs')
-end
-end
+%%
+% _perceptron_metodo1_ es uno de los métodos usados para calcular una
+% ecuación basada en el perceptrón. Otros métodos usados son el _perceptron_metodo2_
+% y _perceptron_metodo3_, mostrados al final. Por motivos prácticos, se
+% mostrará la salida de este algoritmo, para luego hacer un análisis de cada uno de ellos.
+%
+% Entonces, al ejecutar el algoritmo, la salida se muestra en la figura.
+%%
 
-return;
+ X1=0:0.01:3;
+ X2=(-Wf(2)/Wf(3))*X1-(Wf(1)/Wf(3))+(umbral/Wf(3));
+ plot(X1,X2)
+ hold on
+ grid on
+ 
+ for j=1:1:4
+ if Yi(j)==1
+     plot(Xi(2,j),Xi(3,j),'REPLACE_WITH_DASH_DASHgs')
+ else
+     plot(Xi(2,j),Xi(3,j),'REPLACE_WITH_DASH_DASHrs')
+ end
+ end
+ %% Primer método
+ %
+ % En este primer método la función delta de ajuste de los pesos es igual a
+ % las salidas
+ % <include>perceptron_metodo1.m</include>
+ %%
+ %% Segundo método
+ %
+ % En este segundo método la función delta de ajuste de los pesos es igual a
+ % la diferencia de las salidas y las entradas
+ %%
+ % <include>perceptron_metodo2.m</include>
+ %%
+ %% Tercer método
+ %
+ % En este tercer método la función delta de ajuste de los pesos es igual a
+ % la diferencia de las salidas y las entradas, multiplicadas por una
+ % coeficiente de aprendizaje alfa
+ %%
+ % <include>perceptron_metodo3.m</include>
+ %%
+ %% Análisis de los métodos
+ %
+ % Para hacer una comparativa de los algoritmos, el enfoque usado es
+ % analizar el tercer algoritmo en búsqueda de ciertas variables adecuadas
+ % con determinados coeficientes de aprendizaje para obtener con cual alfa
+ % se tiene una respuesta más rápida, cual tiene más variación de peso y
+ % cual tiene mas iteraciones.
+ % 
+ % El primer enfoque será medir el tiempo promedio de diferentes
+ % coeficientes
+ %%
+ 
+ j=1;
+ for alpha=0.1:0.1:10
+     t=0;
+     for i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
+        Wi=[w0 w1 w2];
+        tic
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        t=t+toc;
+     end
+     alphas(j)=t;
+     j=j+1;
+ end
+ 
+ figure
+ alpha=0.1:0.1:10;
+ plot(alpha,alphas)
+ title('Tiempo usado por el método 3')
+ xlabel('alpha') % x-axis label
+ ylabel('Tiempo en ms') 
+ hold on
+ grid on
+ 
+ %%
+ % Como se puede ver, no se aprecia una diferencia significativa. El
+ % siguiente método contempla el número de iteraciones.
+ %%
+ 
+ j=1;
+ for alpha=0.1:0.1:10
+     n_iter=0;
+     for i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
+        Wi=[w0 w1 w2];
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        n_iter=n_iter+N;
+     end
+     alphas(j)=n_iter;
+     j=j+1;
+ end
+ 
+ figure
+ alpha=0.1:0.1:10;
+ plot(alpha,alphas)
+ title('Numero de iteraciones promedio por el método 3')
+ xlabel('alpha') % x-axis label
+ ylabel('Iteraciones') 
+ hold on
+ grid on
+ 
+ %%
+ % Como se puede apreciar, no hay una diferencia significativa antes de 1,
+ % por lo que se vuelve a analizar, esta vez de 0 a 1.
+ %%
+ 
+ j=1;
+ maxIter=500;
+ for alpha=0.01:0.01:1
+     n_iter=0;
+     for i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
+        Wi=[w0 w1 w2];
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        n_iter=n_iter+N;
+     end
+     alphas(j)=n_iter;
+     
+     %Para encontrar el valor de alpha con el menor número de iteraciones
+     if alphas(j)<maxIter
+         alphaMin=alpha;
+         maxIter=alphas(j);
+     end
+     j=j+1;
+ end
+ 
+ figure
+ alpha=0.01:0.01:1;
+ plot(alpha,alphas)
+ title('Numero de iteraciones promedio por el método 3')
+ xlabel('alpha') % x-axis label
+ ylabel('Iteraciones') 
+ hold on
+ grid on
+ 
+ %%
+ % Usando este análisis, se encuentra un alpha que entrega un número de
+ % iteraciones muy pequeño entre 0.14 y 0.18. 
+ %
+ % Por último, se hará el análisis con la diferencia de pesos mas pequeña y más grande 
+ %%
+ 
+ j=1;
+ for alpha=0.01:0.01:1
+     for i=1:1:100
+        w0=rand;
+        w1=rand;
+        w2=rand;
 
+        Wi=[w0 w1 w2];
+        [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+        dW=Wf(1)-Wi(1);
+     end
+     alphas(j)=dW;
+     j=j+1;
+ end
+ 
+ figure
+ alpha=0.01:0.01:1;
+ plot(alpha,alphas)
+ title('Numero de iteraciones promedio por el método 3')
+ xlabel('alpha') % x-axis label
+ ylabel('Iteraciones') 
+ hold on
+ grid on
+ 
+ return;
+ 
+ el enfoque usado es el promedio
+ % de cada uno de las variables a evaluar sobre 100 muestras. Las variables
+ % que se van a comparar son el número de iteraciones, la duración de cada
+ % algoritmo y la variación de cada peso.
+ 
+ NiM1=0; %Numero de iteraciones del método 1
+ NiM2=0; %Numero de iteraciones del método 3
+ NiM3=0; %Numero de iteraciones del método 4
+ 
+ for i=1:1:100
+    w0=rand;
+    w1=rand;
+    w2=rand;
 
-
-for conjunto=1:1:3
-
-% Definicion de los pesos iniciales
-w0=rand;
-w1=rand;
-w2=rand;
-
-% Se guardan los pesos iniciales
-w0i=w0;
-w1i=w1;
-w2i=w2;
-
-%Se define la tabla de verdad
-x0=1;
-x1=[0 0 1 1];
-x2=[0 1 0 1];
-Sd=[-1 -1 -1 1];
-
-%Imprime la tabla de verdad
-disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH')
-disp('Tabla de verdad para AND:') 
-disp(['x1 x2 sd']);
-for i=1:1:4
-    disp([num2str(x1(i)),' ',num2str(x2(i)),' ',num2str(Sd(i))]);
-end
-
-intentos=0;
-validador=0;
-
-%Se valida que los 4 valores est�n correctos
-while validador < 4
-validador=0;
-intentos=intentos+1;
-    for i=1:1:4
-      f(i)=x0*w0+x1(i)*w1+x2(i)*w2;
-      disp(['f(',num2str(i),')=',num2str(w0),'*',num2str(x0),' + ',num2str(w1),'*',num2str(x1(i)),' + ',num2str(w2),'*',num2str(x2(i)),'=',num2str(f(i)),'=',num2str(f(i))]);
-      
-        d=2;
-        if f(i)<d
-          Sr(i)=-1;
-        else
-          Sr(i)=1;
-        end
-    
-        if Sr(i)==Sd(i)
-          %Si la salida resultante es igual a la deseada, se le suma uno al validador
-          validador=validador+1;
-        else
-          %En caso contrario, se ajustan los pesos
-          %METODO 1
-          fd=Sd(i);
-          %METODO 2
-          fd=(Sd(i)-Sr(i));
-          %METODO 3
-          fd=0.1*(Sd(i)-Sr(i));
-          
-          
-          Aw0=x0*fd
-          Aw1=x1(i)*fd;
-          Aw2=x2(i)*fd;
-        
-          w0=w0+Aw0;
-          w1=w1+Aw1;
-          w2=w2+Aw2;
-    end
-end
-end
-
-disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH')
-disp('Los pesos iniciales son:') 
-disp(['w0: ',num2str(w0i)]) 
-disp(['w1: ',num2str(w1i)]) 
-disp(['w2: ',num2str(w2i)])
-disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH')
-disp('Los pesos finales son:') 
-disp(['w0: ',num2str(w0)]) 
-disp(['w1: ',num2str(w1)]) 
-disp(['w2: ',num2str(w2)]) 
-disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH')
-disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH')
-disp(['El numero de Interacciones necesarias son:',num2str(intentos)]) 
-disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH')
-
-X1=0:0.01:3;
-X2=(-w1/w2)*X1-(w0/w2)+(d/w2);
-plot(X1,X2)
-hold on
-grid on
-
-
-for j=1:1:4
-if Sd(j)==1
-    plot(x1(j),x2(j),'REPLACE_WITH_DASH_DASHgs')
-else
-    plot(x1(j),x2(j),'REPLACE_WITH_DASH_DASHrs')
-end
-end    
-
-indice=conjunto+1;
-
-simulacion(indice,1)=conjunto;
-simulacion(indice,2)=w0i;
-simulacion(indice,3)=w1i;
-simulacion(indice,4)=w2i;
-
-simulacion(indice,5)=w0;
-simulacion(indice,6)=w1;
-simulacion(indice,7)=w2;
-
-simulacion(indice,8)=intentos;
-
-end
-
-colNames={'Experimento','Peso inicial w0','Peso inicial w1','Peso inicial w2','Peso final w0','Peso final w1','Peso final w2','No intentos'};
-
-for i=1:size(simulacion,1)
-    row{i} = [''];
-end
-
-%dispmat(simulacion,'AND',row,colNames)
-
-
-
-
+    Wi=[w0 w1 w2];
+    [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
+    NiM2=NiM2+N;
+    [Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
+    NiM1=NiM1+N;
+ end
+ 
+ 
 ##### SOURCE END #####
 --></body></html>

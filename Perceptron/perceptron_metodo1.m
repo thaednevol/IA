@@ -40,14 +40,18 @@ validador=0;
             if Yd(i)==Yi(i)
                 validador=validador+1;   
             else
-                %METODO 1: RED HEBB
+                %%
+                % METODO 1: RED HEBB
+                % En este método la función delta de ajuste es igual a la
+                % función de salida
+                %%
                 fd=Yi(i);
                 %AJUSTE DE COEFICIENTES
                 for j=1:1:coefIndex
                     Wi(j)=Wi(j)+Xi(j,i)*fd;
-                    Wf=Wi;
                 end
             end
+            Wf=Wi;
         end
     end
     %INGRESA LA SALIDA A LA SOLUCION

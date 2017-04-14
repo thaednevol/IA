@@ -45,9 +45,9 @@ validador=0;
                 %AJUSTE DE COEFICIENTES
                 for j=1:1:coefIndex
                     Wi(j)=Wi(j)+Xi(j,i)*fd;
-                    Wf=Wi;
                 end
             end
+            Wf=Wi;
         end
     end
     %INGRESA LA SALIDA A LA SOLUCION
