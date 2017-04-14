@@ -1,4 +1,4 @@
-%%  Perceptrón (AND 2 entradas)
+%%  Perceptrón (OR 2 entradas)
 %
 %  Análisis y desarrollo de los algoritmos del Perceptrón, método de
 %  aprendizaje de clasificación supervisado. Bajo las correctas
@@ -58,7 +58,7 @@ Xi = [x0;x1;x2];
 %  Se definen las salidas
 %%
 
-Yi=[-1 -1 -1 1];
+Yi=[-1 1 1 1];
 
 %%
 % Por último, se define un umbral, que es el que define qué valor es
@@ -212,6 +212,7 @@ umbral=2;
      end
      j=j+1;
  end
+
  
  figure
  alpha=0.01:0.01:1;
@@ -224,7 +225,7 @@ umbral=2;
  
  %%
  % Usando este análisis, se encuentra un alpha que entrega un número de
- % iteraciones muy pequeño entre 0.14 y 0.18. 
+ % iteraciones muy pequeño entre 0.2 y 0.4. 
  %
  % Por último, se hará el análisis con la diferencia de pesos mas pequeña y más grande 
  %%
@@ -265,7 +266,7 @@ umbral=2;
  grid on
  
  %%
- % Como se puede observar, los valores entre 0.1 y 0.2 entregan diferencias
+ % Como se puede observar, los valores entre 0.2 y 0.4 entregan diferencias
  % de peso muy pequeñas.
  %
  % Entonces, para comparar con los otros dos algoritmos, se toma un valor
@@ -310,6 +311,8 @@ umbral=2;
  TuM2=0; %Tiempo usado por el método 3
  TuM3=0; %Tiempo usado por el método 4
  
+ alpha=0.3;
+ 
  for i=1:1:100
     w0=rand;
     w1=rand;
@@ -321,8 +324,7 @@ umbral=2;
     TuM1=TuM1+toc;
     tic
     [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
-    TuM2=TuM2+toc;
-    alpha=0.15;
+    TuM2=TuM2+toc;    
     tic
     [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
     TuM3=TuM3+toc;
@@ -366,7 +368,6 @@ umbral=2;
     DpM2W1=abs(Wf(2)-Wi(2))+DpM2W1;
     DpM2W2=abs(Wf(3)-Wi(3))+DpM2W2;
     
-    alpha=0.15;
     [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
     DpM3W0=abs(Wf(1)-Wi(1))+DpM3W0;
     DpM3W1=abs(Wf(2)-Wi(2))+DpM3W1;

@@ -1,4 +1,4 @@
-%%  Perceptrón
+%%  Perceptrón (XOR 2 entradas)
 %
 %  Análisis y desarrollo de los algoritmos del Perceptrón, método de
 %  aprendizaje de clasificación supervisado. Bajo las correctas
@@ -58,7 +58,13 @@ Xi = [x0;x1;x2];
 %  Se definen las salidas
 %%
 
-Yi=[-1 -1 -1 1];
+Yi=[1 -1 -1 1];
+
+%%
+% Al ejecutar este código, no se presenta ninguna respuesta, ya que xor
+% establece una salida que no es posible dividirla con una sola línea
+%%
+return
 
 %%
 % Por último, se define un umbral, que es el que define qué valor es
@@ -212,6 +218,7 @@ umbral=2;
      end
      j=j+1;
  end
+
  
  figure
  alpha=0.01:0.01:1;
@@ -224,7 +231,7 @@ umbral=2;
  
  %%
  % Usando este análisis, se encuentra un alpha que entrega un número de
- % iteraciones muy pequeño entre 0.14 y 0.18. 
+ % iteraciones muy pequeño entre 0.2 y 0.4. 
  %
  % Por último, se hará el análisis con la diferencia de pesos mas pequeña y más grande 
  %%
@@ -265,7 +272,7 @@ umbral=2;
  grid on
  
  %%
- % Como se puede observar, los valores entre 0.1 y 0.2 entregan diferencias
+ % Como se puede observar, los valores entre 0.2 y 0.4 entregan diferencias
  % de peso muy pequeñas.
  %
  % Entonces, para comparar con los otros dos algoritmos, se toma un valor
@@ -310,6 +317,8 @@ umbral=2;
  TuM2=0; %Tiempo usado por el método 3
  TuM3=0; %Tiempo usado por el método 4
  
+ alpha=0.3;
+ 
  for i=1:1:100
     w0=rand;
     w1=rand;
@@ -318,10 +327,68 @@ umbral=2;
     Wi=[w0 w1 w2];
     tic
     [Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
-    Tu=NiM1+N;
+    TuM1=TuM1+toc;
+    tic
     [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
-    NiM2=NiM2+N;
-    alpha=0.15;
+    TuM2=TuM2+toc;    
+    tic
     [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
-    NiM3=NiM3+N;
+    TuM3=TuM3+toc;
  end
+ 
+  % El tiempo usado por el método 1 es
+ TuM1
+ % El tiempo usado por el método 2 es
+ TuM2
+ % El tiempo usado por el método 3 es
+ TuM3
+ 
+ 
+ %%
+ % Por último, se evalúa la diferencia de pesos entre los 3 algoritmos
+ %%
+ 
+ DpM1W0=0; %Diferencia de pesos w0 resultante del método 1
+ DpM1W1=0; %Diferencia de pesos w1 resultante del método 1
+ DpM1W2=0; %Diferencia de pesos w2 resultante del método 1
+ DpM2W0=0; %Diferencia de pesos w0 resultante del método 2
+ DpM2W1=0; %Diferencia de pesos w1 resultante del método 2
+ DpM2W2=0; %Diferencia de pesos w3 resultante del método 2
+ DpM3W0=0; %Diferencia de pesos w0 resultante del método 3
+ DpM3W1=0; %Diferencia de pesos w1 resultante del método 3
+ DpM3W2=0; %Diferencia de pesos w3 resultante del método 3
+ 
+ for i=1:1:100
+    w0=rand;
+    w1=rand;
+    w2=rand;
+
+    Wi=[w0 w1 w2];
+    [Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
+    DpM1W0=abs(Wf(1)-Wi(1))+DpM1W0;
+    DpM1W1=abs(Wf(2)-Wi(2))+DpM1W1;
+    DpM1W2=abs(Wf(3)-Wi(3))+DpM1W2;
+    
+    [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
+    DpM2W0=abs(Wf(1)-Wi(1))+DpM2W0;
+    DpM2W1=abs(Wf(2)-Wi(2))+DpM2W1;
+    DpM2W2=abs(Wf(3)-Wi(3))+DpM2W2;
+    
+    [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+    DpM3W0=abs(Wf(1)-Wi(1))+DpM3W0;
+    DpM3W1=abs(Wf(2)-Wi(2))+DpM3W1;
+    DpM3W2=abs(Wf(3)-Wi(3))+DpM3W2;
+ end
+ 
+ DpM1=[DpM1W0 DpM1W1 DpM1W2];
+ DpM2=[DpM2W0 DpM2W1 DpM2W2];
+ DpM3=[DpM3W0 DpM3W1 DpM3W2];
+ 
+  % La diferencia de pesos resultante del método 1 es
+  DpM1
+ 
+ % La diferencia de pesos resultante del método 2 es
+  DpM2
+  
+ % La diferencia de pesos resultante del método 3 es
+  DpM3
