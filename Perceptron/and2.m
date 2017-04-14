@@ -100,6 +100,8 @@ umbral=2;
  %
  % En este primer método la función delta de ajuste de los pesos es igual a
  % las salidas
+ %%
+ %%
  % <include>perceptron_metodo1.m</include>
  %%
  %% Segundo método

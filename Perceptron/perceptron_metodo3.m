@@ -30,7 +30,7 @@ validador=0;
             end
             %SE COMPARA CON EL UMBRAL
             if f(i)<umbral
-                Yd(i)=-1;
+                Yd(i)=  -1;
             else
                 Yd(i)=1;
             end

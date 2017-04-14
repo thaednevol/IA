@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Perceptr&oacute;n</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-14"><meta name="DC.source" content="and2.m"><style type="text/css">
+      --><title>Perceptr&oacute;n (AND 2 entradas)</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-14"><meta name="DC.source" content="and2.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Perceptr&oacute;n</h1><!--introduction--><pre>An&aacute;lisis y desarrollo de los algoritmos del Perceptr&oacute;n, m&eacute;todo de
+  </style></head><body><div class="content"><h1>Perceptr&oacute;n (AND 2 entradas)</h1><!--introduction--><pre>An&aacute;lisis y desarrollo de los algoritmos del Perceptr&oacute;n, m&eacute;todo de
 aprendizaje de clasificaci&oacute;n supervisado. Bajo las correctas
 suposiciones, el procedimiento de aprendizaje iterativo converge a los
 pesos correctos, es decir, a los pesos que permiten que la red produzca
@@ -198,7 +198,7 @@ validador=0;
             <span class="keyword">end</span>
             <span class="comment">%SE COMPARA CON EL UMBRAL</span>
             <span class="keyword">if</span> f(i)&lt;umbral
-                Yd(i)=-1;
+                Yd(i)=  -1;
             <span class="keyword">else</span>
                 Yd(i)=1;
             <span class="keyword">end</span>
@@ -374,12 +374,12 @@ NiM1 =
 
 NiM2 =
 
-   505
+   525
 
 
 NiM3 =
 
-   228
+   220
 
 </pre><p>A continuaci&oacute;n se evaluar&aacute; el tiempo que se demora cada algoritmo</p><pre class="codeinput"> TuM1=0; <span class="comment">%Tiempo usado por el m&eacute;todo 1</span>
  TuM2=0; <span class="comment">%Tiempo usado por el m&eacute;todo 3</span>
@@ -412,17 +412,17 @@ NiM3 =
 </pre><pre class="codeoutput">
 TuM1 =
 
-    0.0095
+    0.0111
 
 
 TuM2 =
 
-    0.0094
+    0.0114
 
 
 TuM3 =
 
-    0.0076
+    0.0092
 
 </pre><p>Por &uacute;ltimo, se eval&uacute;a la diferencia de pesos entre los 3 algoritmos</p><pre class="codeinput"> DpM1W0=0; <span class="comment">%Diferencia de pesos w0 resultante del m&eacute;todo 1</span>
  DpM1W1=0; <span class="comment">%Diferencia de pesos w1 resultante del m&eacute;todo 1</span>
@@ -472,21 +472,21 @@ TuM3 =
 </pre><pre class="codeoutput">
 DpM1 =
 
-    67   123    52
+    60   118    44
 
 
 DpM2 =
 
-   344   344   172
+   352   352   176
 
 
 DpM3 =
 
-   27.9000   32.1000   31.2000
+   25.8000   30.3000   30.0000
 
 </pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%%  Perceptrón
+%%  Perceptrón (AND 2 entradas)
 %
 %  Análisis y desarrollo de los algoritmos del Perceptrón, método de
 %  aprendizaje de clasificación supervisado. Bajo las correctas
