@@ -95,6 +95,7 @@ umbral=2;
      plot(Xi(2,j),Xi(3,j),'--rs')
  end
  end
+ 
  %% Primer método
  %
  % En este primer método la función delta de ajuste de los pesos es igual a
@@ -230,6 +231,9 @@ umbral=2;
  
  j=1;
  for alpha=0.01:0.01:1
+     dW1=0;
+     dW2=0;
+     dW3=0;
      for i=1:1:100
         w0=rand;
         w1=rand;
@@ -237,27 +241,40 @@ umbral=2;
 
         Wi=[w0 w1 w2];
         [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
-        dW=Wf(1)-Wi(1);
+        dW1=abs(Wf(1)-Wi(1))+dW1;
+        dW2=abs(Wf(2)-Wi(2))+dW2;
+        dW3=abs(Wf(3)-Wi(3))+dW3;
      end
-     alphas(j)=dW;
+     W1(j)=dW1;
+     W2(j)=dW2;
+     W3(j)=dW3;
      j=j+1;
  end
  
  figure
+ hold on
  alpha=0.01:0.01:1;
- plot(alpha,alphas)
- title('Numero de iteraciones promedio por el método 3')
+ plot(alpha,W1,'--rs')
+ plot(alpha,W2,'--gs')
+ plot(alpha,W3,'--bs')
+ title('Diferencia de pesos en el método 3')
  xlabel('alpha') % x-axis label
- ylabel('Iteraciones') 
+ ylabel('Diferencia')
+ legend('Diferencia de w0','Diferencia de w1', 'Diferencia de w2')
  hold on
  grid on
  
- return;
- 
- el enfoque usado es el promedio
+ %%
+ % Como se puede observar, los valores entre 0.1 y 0.2 entregan diferencias
+ % de peso muy pequeñas.
+ %
+ % Entonces, para comparar con los otros dos algoritmos, se toma un valor
+ % de alpha de 0.15 y el enfoque usado es el promedio
  % de cada uno de las variables a evaluar sobre 100 muestras. Las variables
  % que se van a comparar son el número de iteraciones, la duración de cada
  % algoritmo y la variación de cada peso.
+ %
+ %%
  
  NiM1=0; %Numero de iteraciones del método 1
  NiM2=0; %Numero de iteraciones del método 3
@@ -269,10 +286,51 @@ umbral=2;
     w2=rand;
 
     Wi=[w0 w1 w2];
-    [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
-    NiM2=NiM2+N;
     [Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
     NiM1=NiM1+N;
+    [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
+    NiM2=NiM2+N;
+    alpha=0.15;
+    [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+    NiM3=NiM3+N;
  end
  
+ % EL número de iteraciones usadas por el método 1 es
+ NiM1
+ % El número de iteraciones usadas por el método 2 es
+ NiM2
+ % El número de iteraciones usadas por el método 3 es
+ NiM3
  
+ %%
+ % A continuación se evaluará el tiempo que se demora cada algoritmo
+ %%
+ 
+ TuM1=0; %Tiempo usado por el método 1
+ TuM2=0; %Tiempo usado por el método 3
+ TuM3=0; %Tiempo usado por el método 4
+ 
+ for i=1:1:100
+    w0=rand;
+    w1=rand;
+    w2=rand;
+
+    Wi=[w0 w1 w2];
+    tic
+    [Wf,Yf,N]=perceptron_metodo1(Wi,Xi,Yi,umbral);
+    TuM1=TuM1+toc;
+    tic
+    [Wf,Yf,N]=perceptron_metodo2(Wi,Xi,Yi,umbral);
+    TuM2=TuM2+toc;
+    alpha=0.15;
+    tic
+    [Wf,Yf,N]=perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
+    TuM3=TuM3+toc;
+ end
+ 
+  % El tiempo usado por el método 1 es
+ TuM1
+ % El tiempo usado por el método 2 es
+ TuM2
+ % El tiempo usado por el método 3 es
+ TuM3
