@@ -11,7 +11,7 @@ clc;
 %%
 
 Wi=[rand rand rand rand rand rand rand rand rand];
-
+Wi
 %%
 %  A continuación se definen las entradas
 %%
@@ -35,10 +35,10 @@ e = zeros(1,4);
 aux = 1;
 dwant = zeros(1,9);
 counter = 0;
-ec = 1;
+ec = 3;
 alpha = 0.1;
 beta = 0.4;
-E = 0.01;
+E = 1.6;
 
 A=[Xi(1,1) Xi(2,1);
    Xi(1,2) Xi(2,2);
@@ -50,47 +50,79 @@ while ec > E
     for i = 1:1:4
         S1 = (Xi(1,i)*Wi(2) + Xi(2,i)*Wi(4) + Wi(1));
         O1 = (1/(1+exp(-S1)));
-        O1;
+        
         S2 = (Xi(1,i)*Wi(3) + Xi(2,i)*Wi(5) + Wi(6));
         O2 = (1/(1+exp(-S2)));
-        O2;
-        S3 = (O1*Wi(7)+O2*Wi(8)+Wi(9));
-        O3 = 1/(1+exp(-S3));
-        O3;
-        Y(i) = O3;
+        
+        S3 = (O1*Wi(7) + O2*Wi(8) + Wi(9));
+        O3 = 1 / (1+exp(-S3));
+        
         error = Yi(i)-O3;
-        error;
+        
         if error ~= 0
-            d0 = error * O3^2 * exp(-S3);
+            d0 = error * exp(S3) / (1+exp(S3))^2;
             
             dw7 = alpha*d0*O1;
             dw8 = alpha*d0*O2;
+            
             dw9 = alpha*d0;
             
             dS1 = d0*Wi(7);
             dS2 = d0*Wi(8);
             
-            d1 = dS1* O1^2 * exp(-S1);
-            d2 = dS2* O2^2 * exp(-S2);
+            d1 = dS1* exp(S1) / (1 + exp(S1))^2;
+            d2 = dS2* exp(S2) / (1 + exp(S2))^2;
             
             dw1 = alpha*d1;
-            dw2 = alpha*d1*Xi(1,i);
-            dw3 = alpha*d2*Xi(1,i);
-            dw4 = alpha*d1*Xi(2,i);
-            dw5 = alpha*d2*Xi(2,i);
+            
+            dw2 = alpha * d1 * Xi(1,i);
+            dw3 = alpha * d2 * Xi(1,i);
+            dw4 = alpha * d1 * Xi(2,i);
+            dw5 = alpha * d2 * Xi(2,i);
+            
             dw6 = alpha*d2;
             
-            w(9)=0;
+            dw = [dw1 dw2 dw3 dw4 dw5 dw6 dw7 dw8 dw9];
+                
             for k=1:1:9
-                dw = [dw1 dw2 dw3 dw4 dw5 dw6 dw7 dw8 dw9];
-                w(k) = w(k)+dw(k)+dwant(k)*beta; %momentum
+                Wi(k) = Wi(k)+dw(k)+dwant(k)*beta; %momentum
             end
-
-        end    
+            
+            dwant=dw;
+            
+        end
+        
+        e(i) = error;
+        
     end
+    ec = (1/2)*sum(e.^2);
+    ec
+    counter = counter + 1;
+end
+
+Wi
+
+for i=1:1:4
+    S1 = (Xi(1,i)*Wi(2) + Xi(2,i)*Wi(4) + Wi(1));
+    O1 = 1/ (1+exp(-S1));
+    
+    S2 = (Xi(1,i)*Wi(3) + Xi(2,i)*Wi(5) + Wi(6));
+    O2 = (1/(1+exp(-S2)));
+    
+    S3 = (O1*Wi(7) + O2*Wi(8) + Wi(9));
+    O3 = 1/(1+exp(-S3));
+
+    [Xi(1,i) Xi(2,i) O3]
 end
 
 return
+
+if counter >= 40000
+        b = 1;
+        
+    else
+        b = 0;
+    end
 
 %% Algoritmo backpropagation
 
