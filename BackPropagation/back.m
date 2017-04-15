@@ -4,7 +4,10 @@ clear all;
 close all;
 clc;
 % XOR input for x1 and x2
-input = [0 0; 0 1; 1 0; 1 1];
+input = [0 0; 
+         0 1; 
+         1 0; 
+         1 1];
 % Desired output of XOR
 output = [0;1;1;0];
 % Initialize the bias
@@ -12,10 +15,12 @@ bias = [-1 -1 -1];
 % Learning coefficient
 coeff = 0.7;
 % Number of learning iterations
-iterations = 10000;
+iterations=10000;
 % Calculate weights randomly using seed.
 rand('state',sum(100*clock));
-weights = -1 +2.*rand(3,3);
+%weights = -1 +2.*rand(3,3);
+
+weights=[-0.0188,0.6732,0.9287;-0.7273,-0.4058,0.7489;-0.4942,-0.8239,-0.0350]
 
 for i = 1:iterations
    out = zeros(4,1);
@@ -28,6 +33,7 @@ for i = 1:iterations
       % Note that sigma is a different m file 
       % that I created to run this operation
       x2(1) = sigma(H1);
+      
       H2 = bias(1,2)*weights(2,1)+ input(j,1)*weights(2,2)+ input(j,2)*weights(2,3);
       x2(2) = sigma(H2);
 
@@ -42,8 +48,8 @@ for i = 1:iterations
       delta3_1 = out(j)*(1-out(j))*(output(j)-out(j));
       
       % Propagate the delta backwards into hidden layers
-      delta2_1 = x2(1)*(1-x2(1))*weights(3,2)*delta3_1;
-      delta2_2 = x2(2)*(1-x2(2))*weights(3,3)*delta3_1;
+      delta2_1 = x2(1)*(1-x2(1))*weights(3,2) * delta3_1;
+      delta2_2 = x2(2)*(1-x2(2))*weights(3,3) * delta3_1;
       
       % Add weight changes to original weights 
       % And use the new weights to repeat process.

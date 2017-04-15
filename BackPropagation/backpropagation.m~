@@ -32,58 +32,47 @@ Yi=[0 1 1 0];
 alpha=0.7;
 beta=-1;
 
-iterations=100000000;
+iterations=2
 
 A=[Xi(1,1) Xi(2,1);
    Xi(1,2) Xi(2,2);
    Xi(1,3) Xi(2,3);
    Xi(1,4) Xi(2,4)]
 
-%for i = 1:iterations
-d=0;
-t=0.999;
-i=0;
-while d<t
-    i=i+1;
+for i = 1:iterations
     Yf=zeros(1,4);
     for j=1:length(Yi)
-        [Yf,Wf]=bp_metodo1();
         H1 = beta*Wi(1,1) + Xi(1,j)*Wi(1,2) + Xi(2,j)*Wi(1,3);
         O1=sigma(H1);
-        H2 = beta*Wi(2,1) + Xi(1,j)*Wi(2,2) + Xi(2,j)*Wi(2,3);
-        O2=sigma(H2);
+        H2 = beta*Wi(2,1) + Xi(1,j)*Wi(2,2) + Xi(2,j)*Wi(2,3)
+        O2=sigma(H2)
         
-        H3 = beta*Wi(3,1) + O1*Wi(3,2) + O2*Wi(3,3);
+        H3 = beta*Wi(3,1) + H1*Wi(3,2) + H2*Wi(3,3)
         
+        return
         Yf(j)=sigma(H3);
         
-        e(j)=Yi(j) - Yf(j);
+        error=Yi(j) - Yf(j);
         
-        d3_1= Yf(j) * (1 - Yf(j)) * e(j);
+        d3_1= Yf(j) * (1 - Yf(j)) * error;
         
         d2_1=O1 * (1-O1) * Wi(3,2) * d3_1;
         d2_2=O2 * (1-O2) * Wi(3,3) * d3_1;
        
         for k = 1:3
-             if k == 1 % Bias cases
-                Wi(1,k) = Wi(1,k) + alpha * beta * d2_1;
-                Wi(2,k) = Wi(2,k) + alpha * beta * d2_2;
-                Wi(3,k) = Wi(3,k) + alpha * beta * d3_1;
-             else % When k=2 or 3 input cases to neurons
-                    Wi(1,k) = Wi(1,k) + alpha*Xi(1,j)*d2_1;
-                    Wi(2,k) = Wi(2,k) + alpha*Xi(2,j)*d2_2;
-                if (k==2)
-                    Wi(3,k) = Wi(3,k) + alpha*O1*d3_1;
-                else
-                    Wi(3,k) = Wi(3,k) + alpha*O2*d3_1;
-                end
-             end
+         if k == 1 % Bias cases
+            Wi(1,k) = Wi(1,k) + alpha * beta * d2_1;
+            Wi(2,k) = Wi(2,k) + alpha * beta * d2_2;
+            Wi(3,k) = Wi(3,k) + alpha * beta * d3_1;
+         else % When k=2 or 3 input cases to neurons
+                Wi(1,k) = Wi(1,k) + alpha*Xi(1,j)*d2_1;
+                Wi(2,k) = Wi(2,k) + alpha*Xi(2,j)*d2_2;
+            if (k==2)
+                Wi(3,k) = Wi(3,k) + alpha*O1*d3_1;
+            else
+                Wi(3,k) = Wi(3,k) + alpha*O2*d3_1;
+            end
+         end
         end
     end
-    
-    ec=sum(e.^2)/2;
-    d=abs(max(Yf)-min(Yf));
 end
-i
-Yf
-ec

@@ -1,0 +1,1 @@
+function [Yf,Wf,error] = bp_metodo1(Xi,Wi,alpha,beta);
