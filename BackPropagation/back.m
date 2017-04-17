@@ -65,7 +65,9 @@ for i = 1:iterations
             weights(3,k) = weights(3,k) + coeff*x2(k-1)*delta3_1;
          end
       end
-   end   
+   end 
+   a=out(j)
+   return
 end
 
 out
