@@ -1,0 +1,1270 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myAnfis</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-01"><meta name="DC.source" content="myAnfis.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS</a></li><li><a href="#4">DESARROLLO DE UN EJEMPLO</a></li><li><a href="#32">Funci&oacute;n de pertenencia Triangular</a></li><li><a href="#36">Funci&oacute;n de pertenencia Trapezoidal</a></li><li><a href="#42">Funci&oacute;n de pertenencia Campana de Bell general</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>;
+</pre><h2 id="2">APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS</h2><pre>La estructura b&aacute;sica del sistema de inferencia fuzzy de Mamdani es un modelo que mapea caracter&iacute;sticas de entrada a funciones
+de pertenencia de entrada a reglas, reglas a un conjunto de caracter&iacute;sticas de salida, y las funciones de pertenencia de salida
+a valores con salida de 'valoraci&oacute;n-&uacute;nica'o a una decisi&oacute;n asociada con  la salida. Tal sistema usa funciones de pertenencia
+fijas que son escogidas arbitrariamente y una regla de estructura que es esencialmente predeterminada por la interpretaci&oacute;n del
+usuario de las caracter&iacute;sticas de las variables del modelo.</pre><pre>ANFIS y el dise&ntilde;ador neuro-difuso aplican t&eacute;cnicas de inferencia difusa al modelado de datos. La forma de las funciones de
+pertenencia depende de los par&aacute;metros y cambiar estos par&aacute;metros cambia la forma de la funci&oacute;n de pertenencia.
+En lugar de simplemente mirar los datos para elegir los par&aacute;metros de la funci&oacute;n de pertenencia, se eligen autom&aacute;ticamente los
+par&aacute;metros de la funci&oacute;n de pertenencia utilizando estas aplicaciones de Fuzzy Logic Toolbox.</pre><pre>Por ejemplo, si se desea aplicar inferencia difusa a un sistema para el cual ya tiene una colecci&oacute;n de datos de entrada/salida
+que se desea utilizar para modelar, seguir el modelo o alg&uacute;n escenario similar. No necesariamente tiene una estructura de
+modelo predeterminada basada en las caracter&iacute;sticas de las variables en su sistema.</pre><pre>En algunas situaciones de modelado, no se puede discernir lo que las funciones de pertenencia deber&iacute;an parecer simplemente
+al mirar los datos. En lugar de elegir arbitrariamente los par&aacute;metros asociados a una funci&oacute;n de pertenencia dada,
+estos par&aacute;metros se podr&iacute;an elegir para adaptar las funciones de pertenencia a los datos de entrada/salida para tener en
+cuenta estos tipos de variaciones en los valores de datos. En tales casos, puede utilizar las t&eacute;cnicas de aprendizaje
+neuro-adaptativas de la Fuzzy Logic Toolbox incorporadas en el comando anfis.</pre><pre>El m&eacute;todo de aprendizaje neuro-adaptativo funciona de manera similar al de las redes neuronales. Las t&eacute;cnicas de aprendizaje
+neuro-adaptativas proporcionan un m&eacute;todo para el procedimiento de modelado difuso para aprender informaci&oacute;n sobre un conjunto
+de datos. El software Fuzzy Logic Toolbox calcula los par&aacute;metros de la funci&oacute;n de pertenencia que mejor permiten que el sistema
+de inferencia difuso asociado rastree los datos de entrada/salida dados. La funci&oacute;n Fuzzy Logic Toolbox que realiza este
+par&aacute;metro de funci&oacute;n de pertenencia se llama anfis en MATLAB.</pre><pre>El acr&oacute;nimo ANFIS deriva su nombre del sistema de inferencia neurodifuso adaptativo. Utilizando un conjunto de datos de
+entrada/salida dado, la funci&oacute;n del toolbox anfis construye un sistema de inferencia difuso (FIS) cuyos par&aacute;metros de funci&oacute;n
+de pertenencia se ajustan usando un algoritmo de propagaci&oacute;n posterior solo o en combinaci&oacute;n con un m&eacute;todo de m&iacute;nimos cuadrados
+Este ajuste permite que sus sistemas difusos aprendan de los datos que est&aacute;n modelando.</pre><pre>Una estructura de tipo red similar a la de una red neuronal, que mapea entradas a trav&eacute;s de funciones de pertenencia de
+entrada y par&aacute;metros asociados, y luego a trav&eacute;s de funciones de pertenencia de salida y par&aacute;metros asociados a salidas, puede
+usarse para interpretar el mapa de entrada/salida.</pre><pre>Los par&aacute;metros asociados con las funciones de pertenencia cambian a trav&eacute;s del proceso de aprendizaje. El c&aacute;lculo de estos
+par&aacute;metros (o su ajuste) es facilitado por un vector gradiente. Este vector gradiente proporciona una medida de lo bien que
+el sistema de inferencia difusa est&aacute; modelando los datos de entrada/salida para un conjunto dado de par&aacute;metros. Cuando se
+obtiene el vector de gradiente, se puede aplicar cualquiera de varias rutinas de optimizaci&oacute;n para ajustar los par&aacute;metros para
+reducir en alguna medida de error. Esta medida de error se define normalmente por la suma de la diferencia cuadr&aacute;tica entre
+salidas reales y deseadas. Anfis utiliza backpropagation o una combinaci&oacute;n de la estimaci&oacute;n por m&iacute;nimos cuadrados y
+backpropagation para la estimaci&oacute;n de los par&aacute;metros de la funci&oacute;n de pertenencia.</pre><pre>El enfoque de modelado utilizado por anfis es similar a muchas t&eacute;cnicas de identificaci&oacute;n de sistemas. En primer lugar, se
+plantea la hip&oacute;tesis de una estructura de modelo parametrizada (relacionar entradas a funciones de pertenencia a reglas a
+salidas a funciones de pertenencia, etc.). A continuaci&oacute;n, recopila datos de entrada/salida en un formato que pueda ser
+utilizado por anfis para el entrenamiento. A continuaci&oacute;n, puede utilizar anfis para entrenar el modelo FIS para emular los
+datos de entrenamiento que se le presentan modificando los par&aacute;metros de la funci&oacute;n de pertenencia de acuerdo con un criterio
+de error elegido.</pre><pre>En general, este tipo de modelado funciona bien si los datos de entrenamiento presentados a anfis para entrenar los
+par&aacute;metros de la funci&oacute;n de pertenencia son totalmente representativos de las caracter&iacute;sticas de los datos que el FIS
+entrenado pretende modelar. En algunos casos, sin embargo, los datos se recogen utilizando medidas ruidosas, y los datos de
+entrenamiento no pueden ser representativos de todas las caracter&iacute;sticas de los datos que se presentar&aacute;n al modelo. En tales
+situaciones, la validaci&oacute;n del modelo es &uacute;til.</pre><pre>La validaci&oacute;n del modelo es el proceso por el cual los vectores de entrada de los conjuntos de datos de entrada/salida en los
+cuales el FIS no fue entrenado, son presentados al modelo FIS entrenado para ver c&oacute;mo el modelo FIS predice los valores de
+salida del conjunto de datos correspondiente.</pre><pre>Un problema con la validaci&oacute;n de modelos para modelos construidos usando t&eacute;cnicas adaptativas es seleccionar un conjunto de
+datos que sea representativo de los datos que el modelo entrenado pretende emular, pero suficientemente distintos del conjunto
+de datos de entrenamiento para no hacer trivial el proceso de validaci&oacute;n.</pre><pre>Si se ha recogido una gran cantidad de datos, esperamos que estos datos contengan todas las caracter&iacute;sticas representativas
+necesarias, por lo que el proceso de selecci&oacute;n de un conjunto de datos para verificar o probar los prop&oacute;sitos se hace m&aacute;s
+f&aacute;cil. Sin embargo, si espera presentar mediciones ruidosas en su modelo, es posible que el conjunto de datos de entrenamiento
+no incluya todas las caracter&iacute;sticas representativas que desea modelar.</pre><pre>El conjunto de datos de prueba le permite comprobar la capacidad de generalizaci&oacute;n del sistema de inferencia difusa resultante.
+La idea detr&aacute;s del uso de un conjunto de datos de verificaci&oacute;n para la validaci&oacute;n del modelo es que despu&eacute;s de cierto punto en
+el entrenamiento, el modelo comienza a superponer el conjunto de datos de entrenamiento. En principio, el error del modelo
+para el conjunto de datos de comprobaci&oacute;n tiende a disminuir a medida que el entrenamiento se lleva a cabo hasta el punto en
+que comienza el sobreentrenado y, a continuaci&oacute;n, el error del modelo para los datos de comprobaci&oacute;n aumenta repentinamente.
+El ajuste excesivo se explica por la prueba del FIS entrenado en los datos de entrenamiento contra los datos de comprobaci&oacute;n
+y eligiendo los par&aacute;metros de la funci&oacute;n de pertenencia como aquellos asociados con el error de comprobaci&oacute;n m&iacute;nimo si estos
+errores indican que el modelo se sobreentrena.</pre><pre>Normalmente, estos conjuntos de datos de entrenamiento y comprobaci&oacute;n se recogen sobre la base de observaciones del sistema
+de destino y luego se almacenan en archivos separados.</pre><h2 id="4">DESARROLLO DE UN EJEMPLO</h2><div><ol><li>Se definen los datos de entrada y salida</li><li>Se genera el FIS</li><li>Se define el entranamiento con el n&uacute;mero de intentos y el error medio cuadr&aacute;tico</li><li>Se entrena el conjunto de datos</li><li>Se validan los resultados</li></ol></div><pre>El problema en cuesti&oacute;n es hacer una aproximaci&oacute;n difusa de la funci&oacute;n y=0.6sin(&#960;x) + 0.3sin(3&#960;x) + 0.1sin(5&#960;x), usando anfis
+con datos de entrenamiento y de validaci&oacute;nws</pre><pre>El primer paso es generar los datos</pre><pre class="codeinput">numPts=200;
+x=linspace(-2,2,numPts)';
+y=0.6*sin(pi*x)+0.3*sin(3*pi*x)+0.1*sin(5*pi*x);
+data=[x y];
+</pre><pre>Se genera los datos de entrenamiento y los datos de validaci&oacute;n</pre><pre class="codeinput">trndata=data(1:2:numPts,:);
+chkdata=data(2:2:numPts,:);
+</pre><pre>La gr&aacute;fica de a ecuaci&oacute;n que se va a entrenar se muestra a continuaci&oacute;n:</pre><pre class="codeinput">figure
+plot(trndata(:,1),trndata(:,2),<span class="string">'o'</span>,chkdata(:,1),chkdata(:,2),<span class="string">'x'</span>)
+title(<span class="string">'Gr&aacute;fica de ecuaci&oacute;n a estimar'</span>);
+</pre><img vspace="5" hspace="5" src="myAnfis_01.png" alt=""> <pre>Se configura el entorno de entrenamiento. Primero, se establece el n&uacute;mero y tipo de funciones de pertenencia. Para el tipo de
+funci&oacute;n, se establece la funci&oacute;n por defecto para mostrar el desarrollo b&aacute;sico. Posteriormente, se evaluar&aacute; cada funci&oacute;n</pre><pre class="codeinput">numMFs=5;
+mfType=<span class="string">'gbellmf'</span>;
+</pre><pre>Se genera la matriz FIS y se visualizan las funciones de pertenencia generadas</pre><pre class="codeinput">fismat=genfis1(trndata,numMFs,mfType);
+
+figure
+[x,mf]=plotmf(fismat,<span class="string">'input'</span>,1);
+plot(x,mf);
+title(<span class="string">'Funciones de pertenenecia'</span>);
+</pre><img vspace="5" hspace="5" src="myAnfis_02.png" alt=""> <pre>A continuaci&oacute;n, se establece el n&uacute;mero de intentos para entrenar la red, as&iacute; como su tolerancia al error.</pre><pre class="codeinput">trnEpoNum=100;
+trnErrGoa=0;
+
+trnOpt=[trnEpoNum trnErrGoa];
+</pre><pre>Luego, se configuran las opciones que se van a visualizar. Con la opci&oacute;n 1 se muestran las opciones por defecto.</pre><pre class="codeinput">dispOpt=1;
+</pre><pre>Se genera una matriz de validaci&oacute;n. Debe ser una muestra aleatoria de los datos de entrada, pero para el ejemplo b&aacute;sico, se
+dejar&aacute; por defecto</pre><pre class="codeinput">trnDataM = [];
+</pre><pre>Por &uacute;ltimo, se genera el tipo de optimizaci&oacute;n que se va a usar: 0: backpropagation y 1 (defecto): m&eacute;todo h&iacute;brido</pre><pre class="codeinput">optMethod=0;
+</pre><pre>Por &uacute;ltimo, se entrena el sistema con los par&aacute;metros anteriormente configurados.</pre><pre class="codeinput">[fismat1,trnErr,ss]=anfis(trndata,fismat,trnOpt,dispOpt,trnDataM,optMethod);
+</pre><pre class="codeoutput">
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 15
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+Start training ANFIS ...
+
+   1 	 0.478383
+   2 	 0.474951
+   3 	 0.471578
+   4 	 0.468266
+   5 	 0.465014
+Step size increases to 0.011000 after epoch 5.
+   6 	 0.461823
+   7 	 0.458383
+   8 	 0.455018
+   9 	 0.451728
+Step size increases to 0.012100 after epoch 9.
+  10 	 0.448512
+  11 	 0.445062
+  12 	 0.441703
+  13 	 0.438436
+Step size increases to 0.013310 after epoch 13.
+  14 	 0.43526
+  15 	 0.431872
+  16 	 0.428593
+  17 	 0.425424
+Step size increases to 0.014641 after epoch 17.
+  18 	 0.422363
+  19 	 0.41912
+  20 	 0.416005
+  21 	 0.413014
+Step size increases to 0.016105 after epoch 21.
+  22 	 0.410144
+  23 	 0.407124
+  24 	 0.404239
+  25 	 0.401484
+Step size increases to 0.017716 after epoch 25.
+  26 	 0.39885
+  27 	 0.396081
+  28 	 0.393435
+  29 	 0.390897
+Step size increases to 0.019487 after epoch 29.
+  30 	 0.388454
+  31 	 0.385858
+  32 	 0.383342
+  33 	 0.380889
+Step size increases to 0.021436 after epoch 33.
+  34 	 0.378487
+  35 	 0.375888
+  36 	 0.373324
+  37 	 0.370786
+Step size increases to 0.023579 after epoch 37.
+  38 	 0.368266
+  39 	 0.365511
+  40 	 0.362769
+  41 	 0.360036
+Step size increases to 0.025937 after epoch 41.
+  42 	 0.357309
+  43 	 0.354314
+  44 	 0.351321
+  45 	 0.348326
+Step size increases to 0.028531 after epoch 45.
+  46 	 0.345326
+  47 	 0.342013
+  48 	 0.33868
+  49 	 0.335314
+Step size increases to 0.031384 after epoch 49.
+  50 	 0.331903
+  51 	 0.328079
+  52 	 0.324154
+  53 	 0.320097
+Step size increases to 0.034523 after epoch 53.
+  54 	 0.315879
+  55 	 0.311021
+  56 	 0.305918
+  57 	 0.300581
+Step size increases to 0.037975 after epoch 57.
+  58 	 0.295064
+  59 	 0.288902
+  60 	 0.28279
+  61 	 0.276833
+Step size increases to 0.041772 after epoch 61.
+  62 	 0.271025
+  63 	 0.264685
+  64 	 0.25824
+  65 	 0.251625
+Step size increases to 0.045950 after epoch 65.
+  66 	 0.244926
+  67 	 0.23774
+  68 	 0.231029
+  69 	 0.224781
+Step size increases to 0.050545 after epoch 69.
+  70 	 0.218794
+  71 	 0.212444
+  72 	 0.206449
+  73 	 0.200943
+Step size increases to 0.055599 after epoch 73.
+  74 	 0.195893
+  75 	 0.190548
+  76 	 0.184993
+  77 	 0.18077
+Step size increases to 0.061159 after epoch 77.
+  78 	 0.181737
+  79 	 0.177867
+  80 	 0.177191
+  81 	 0.173265
+  82 	 0.172967
+Step size increases to 0.067275 after epoch 82.
+  83 	 0.169139
+  84 	 0.171767
+  85 	 0.165748
+  86 	 0.168543
+  87 	 0.162832
+Step size decreases to 0.060547 after epoch 87.
+  88 	 0.165853
+  89 	 0.157537
+  90 	 0.162962
+  91 	 0.155555
+Step size decreases to 0.054493 after epoch 91.
+  92 	 0.160819
+  93 	 0.151673
+  94 	 0.158442
+  95 	 0.150352
+Step size decreases to 0.049043 after epoch 95.
+  96 	 0.156789
+  97 	 0.147472
+  98 	 0.154829
+  99 	 0.146566
+Step size decreases to 0.044139 after epoch 99.
+ 100 	 0.153524
+
+Designated epoch number reached --&gt; ANFIS training completed at epoch 100.
+
+</pre><pre>Se eval&uacute;a el sistema resultante, encontrando el error cuadr&aacute;tico medio</pre><pre class="codeinput">trnOut=evalfis(trndata(:,1),fismat1);
+trnRMSE=norm(trnOut-trndata(:,2))/sqrt(length(trnOut))
+</pre><pre class="codeoutput">
+trnRMSE =
+
+    0.1535
+
+</pre><pre>Se grafica el error vs los intentos.</pre><pre class="codeinput">epoch=1:trnEpoNum;
+figure
+plot(epoch,trnErr,<span class="string">'o'</span>);
+title(<span class="string">'Error vs entrenamientos'</span>);
+hold <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myAnfis_03.png" alt=""> <pre>Por &uacute;ltimo, se visualiza el resultado del sistema entrenado</pre><pre class="codeinput">anfis_y=evalfis(x(:,1),fismat1);
+figure
+plot(trndata(:,1),trndata(:,2),<span class="string">'o'</span>,x,anfis_y,<span class="string">'-'</span>)
+title(<span class="string">'FIS resultante'</span>);
+
+dispOpt=[1 0 0 1];
+</pre><img vspace="5" hspace="5" src="myAnfis_04.png" alt=""> <h2 id="32">Funci&oacute;n de pertenencia Triangular</h2><pre>Tiene la estructura</pre><pre class="codeinput">a = 0:0.1:6;b = trimf(a,[2 3 4]);figure;plot(a,b);
+</pre><img vspace="5" hspace="5" src="myAnfis_05.png" alt=""> <pre>Se establece mediante mfType='trimf';</pre><pre class="codeinput">mfType=<span class="string">'trimf'</span>;
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 15
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.0665
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 15
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1687
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 15
+	Total number of parameters: 20
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1233
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 15
+	Total number of parameters: 20
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1228
+
+</pre><img vspace="5" hspace="5" src="myAnfis_06.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_07.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_08.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_09.png" alt=""> <h2 id="36">Funci&oacute;n de pertenencia Trapezoidal</h2><pre>Tiene la estructura</pre><pre class="codeinput">a = 0:0.1:6;b = trapmf(a,[2 3 4 5]);figure;plot(a,b);
+</pre><img vspace="5" hspace="5" src="myAnfis_10.png" alt=""> <pre>Se establece mediante mfType='trapmf';</pre><pre class="codeinput">mfType=<span class="string">'trapmf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1823
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1554
+
+</pre><img vspace="5" hspace="5" src="myAnfis_11.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_12.png" alt=""> <pre class="codeinput"><span class="comment">%DA ERROR!</span>
+<span class="comment">%mfType='trapmf';</span>
+<span class="comment">%outmftype='constant';</span>
+<span class="comment">%optMethod=1;</span>
+<span class="comment">%anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);</span>
+<span class="comment">%</span>
+<span class="comment">%outmftype='constant';</span>
+<span class="comment">%optMethod=0;</span>
+<span class="comment">%anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);</span>
+</pre><h2 id="42">Funci&oacute;n de pertenencia Campana de Bell general</h2><pre>Tiene la estructura</pre><pre class="codeinput">a = 0:0.1:6;b = gbellmf(a,[1 2 3]);figure;plot(a,b);
+</pre><img vspace="5" hspace="5" src="myAnfis_13.png" alt=""> <pre>Se establece mediante mfType='gbellmf';</pre><pre class="codeinput">mfType=<span class="string">'gbellmf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType=<span class="string">'gaussmf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType=<span class="string">'gauss2mf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType=<span class="string">'pimf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType=<span class="string">'dsigmf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType=<span class="string">'psigmf'</span>;
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 15
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.0840
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 15
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1535
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 15
+	Total number of parameters: 20
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1308
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 15
+	Total number of parameters: 20
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1481
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 10
+	Total number of parameters: 20
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1520
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 10
+	Total number of parameters: 20
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1779
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 10
+	Total number of parameters: 15
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1232
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 10
+	Total number of parameters: 15
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1421
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.0936
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1877
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1572
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.2073
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1764
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1428
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1116
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1136
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.0959
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1730
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1166
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1212
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.0959
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 10
+	Number of nonlinear parameters: 20
+	Total number of parameters: 30
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1731
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1171
+
+
+ANFIS info: 
+	Number of nodes: 24
+	Number of linear parameters: 5
+	Number of nonlinear parameters: 20
+	Total number of parameters: 25
+	Number of training data pairs: 100
+	Number of checking data pairs: 0
+	Number of fuzzy rules: 5
+
+
+trnRMSE =
+
+    0.1209
+
+</pre><img vspace="5" hspace="5" src="myAnfis_14.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_15.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_16.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_17.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_18.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_19.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_20.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_21.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_22.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_23.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_24.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_25.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_26.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_27.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_28.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_29.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_30.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_31.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_32.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_33.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_34.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_35.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_36.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_37.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all;
+
+%%  APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS
+%
+%  La estructura básica del sistema de inferencia fuzzy de Mamdani es un modelo que mapea características de entrada a funciones
+%  de pertenencia de entrada a reglas, reglas a un conjunto de características de salida, y las funciones de pertenencia de salida
+%  a valores con salida de 'valoración-única'o a una decisión asociada con  la salida. Tal sistema usa funciones de pertenencia
+%  fijas que son escogidas arbitrariamente y una regla de estructura que es esencialmente predeterminada por la interpretación del
+%  usuario de las características de las variables del modelo.
+%
+%  ANFIS y el diseñador neuro-difuso aplican técnicas de inferencia difusa al modelado de datos. La forma de las funciones de 
+%  pertenencia depende de los parámetros y cambiar estos parámetros cambia la forma de la función de pertenencia. 
+%  En lugar de simplemente mirar los datos para elegir los parámetros de la función de pertenencia, se eligen automáticamente los 
+%  parámetros de la función de pertenencia utilizando estas aplicaciones de Fuzzy Logic Toolbox.
+%
+%  Por ejemplo, si se desea aplicar inferencia difusa a un sistema para el cual ya tiene una colección de datos de entrada/salida
+%  que se desea utilizar para modelar, seguir el modelo o algún escenario similar. No necesariamente tiene una estructura de 
+%  modelo predeterminada basada en las características de las variables en su sistema.
+%
+%  En algunas situaciones de modelado, no se puede discernir lo que las funciones de pertenencia deberían parecer simplemente
+%  al mirar los datos. En lugar de elegir arbitrariamente los parámetros asociados a una función de pertenencia dada, 
+%  estos parámetros se podrían elegir para adaptar las funciones de pertenencia a los datos de entrada/salida para tener en 
+%  cuenta estos tipos de variaciones en los valores de datos. En tales casos, puede utilizar las técnicas de aprendizaje 
+%  neuro-adaptativas de la Fuzzy Logic Toolbox incorporadas en el comando anfis.
+%
+%  El método de aprendizaje neuro-adaptativo funciona de manera similar al de las redes neuronales. Las técnicas de aprendizaje 
+%  neuro-adaptativas proporcionan un método para el procedimiento de modelado difuso para aprender información sobre un conjunto
+%  de datos. El software Fuzzy Logic Toolbox calcula los parámetros de la función de pertenencia que mejor permiten que el sistema
+%  de inferencia difuso asociado rastree los datos de entrada/salida dados. La función Fuzzy Logic Toolbox que realiza este 
+%  parámetro de función de pertenencia se llama anfis en MATLAB.
+%
+%  El acrónimo ANFIS deriva su nombre del sistema de inferencia neurodifuso adaptativo. Utilizando un conjunto de datos de 
+%  entrada/salida dado, la función del toolbox anfis construye un sistema de inferencia difuso (FIS) cuyos parámetros de función 
+%  de pertenencia se ajustan usando un algoritmo de propagación posterior solo o en combinación con un método de mínimos cuadrados 
+%  Este ajuste permite que sus sistemas difusos aprendan de los datos que están modelando.
+%
+%  Una estructura de tipo red similar a la de una red neuronal, que mapea entradas a través de funciones de pertenencia de 
+%  entrada y parámetros asociados, y luego a través de funciones de pertenencia de salida y parámetros asociados a salidas, puede 
+%  usarse para interpretar el mapa de entrada/salida.
+%
+%  Los parámetros asociados con las funciones de pertenencia cambian a través del proceso de aprendizaje. El cálculo de estos 
+%  parámetros (o su ajuste) es facilitado por un vector gradiente. Este vector gradiente proporciona una medida de lo bien que 
+%  el sistema de inferencia difusa está modelando los datos de entrada/salida para un conjunto dado de parámetros. Cuando se 
+%  obtiene el vector de gradiente, se puede aplicar cualquiera de varias rutinas de optimización para ajustar los parámetros para 
+%  reducir en alguna medida de error. Esta medida de error se define normalmente por la suma de la diferencia cuadrática entre 
+%  salidas reales y deseadas. Anfis utiliza backpropagation o una combinación de la estimación por mínimos cuadrados y 
+%  backpropagation para la estimación de los parámetros de la función de pertenencia.
+%
+%  El enfoque de modelado utilizado por anfis es similar a muchas técnicas de identificación de sistemas. En primer lugar, se 
+%  plantea la hipótesis de una estructura de modelo parametrizada (relacionar entradas a funciones de pertenencia a reglas a 
+%  salidas a funciones de pertenencia, etc.). A continuación, recopila datos de entrada/salida en un formato que pueda ser 
+%  utilizado por anfis para el entrenamiento. A continuación, puede utilizar anfis para entrenar el modelo FIS para emular los
+%  datos de entrenamiento que se le presentan modificando los parámetros de la función de pertenencia de acuerdo con un criterio
+%  de error elegido.
+%
+%  En general, este tipo de modelado funciona bien si los datos de entrenamiento presentados a anfis para entrenar los
+%  parámetros de la función de pertenencia son totalmente representativos de las características de los datos que el FIS
+%  entrenado pretende modelar. En algunos casos, sin embargo, los datos se recogen utilizando medidas ruidosas, y los datos de
+%  entrenamiento no pueden ser representativos de todas las características de los datos que se presentarán al modelo. En tales
+%  situaciones, la validación del modelo es útil.
+%
+%  La validación del modelo es el proceso por el cual los vectores de entrada de los conjuntos de datos de entrada/salida en los
+%  cuales el FIS no fue entrenado, son presentados al modelo FIS entrenado para ver cómo el modelo FIS predice los valores de
+%  salida del conjunto de datos correspondiente.
+%  
+%  Un problema con la validación de modelos para modelos construidos usando técnicas adaptativas es seleccionar un conjunto de
+%  datos que sea representativo de los datos que el modelo entrenado pretende emular, pero suficientemente distintos del conjunto
+%  de datos de entrenamiento para no hacer trivial el proceso de validación.
+%
+%  Si se ha recogido una gran cantidad de datos, esperamos que estos datos contengan todas las características representativas
+%  necesarias, por lo que el proceso de selección de un conjunto de datos para verificar o probar los propósitos se hace más
+%  fácil. Sin embargo, si espera presentar mediciones ruidosas en su modelo, es posible que el conjunto de datos de entrenamiento
+%  no incluya todas las características representativas que desea modelar.
+%
+%  El conjunto de datos de prueba le permite comprobar la capacidad de generalización del sistema de inferencia difusa resultante.
+%  La idea detrás del uso de un conjunto de datos de verificación para la validación del modelo es que después de cierto punto en
+%  el entrenamiento, el modelo comienza a superponer el conjunto de datos de entrenamiento. En principio, el error del modelo
+%  para el conjunto de datos de comprobación tiende a disminuir a medida que el entrenamiento se lleva a cabo hasta el punto en
+%  que comienza el sobreentrenado y, a continuación, el error del modelo para los datos de comprobación aumenta repentinamente.
+%  El ajuste excesivo se explica por la prueba del FIS entrenado en los datos de entrenamiento contra los datos de comprobación
+%  y eligiendo los parámetros de la función de pertenencia como aquellos asociados con el error de comprobación mínimo si estos
+%  errores indican que el modelo se sobreentrena.
+%
+%  Normalmente, estos conjuntos de datos de entrenamiento y comprobación se recogen sobre la base de observaciones del sistema
+%  de destino y luego se almacenan en archivos separados.
+%
+%% 
+%%  DESARROLLO DE UN EJEMPLO
+%
+% # Se definen los datos de entrada y salida
+% # Se genera el FIS
+% # Se define el entranamiento con el número de intentos y el error medio cuadrático
+% # Se entrena el conjunto de datos
+% # Se validan los resultados
+% 
+%  El problema en cuestión es hacer una aproximación difusa de la función y=0.6sin(πx) + 0.3sin(3πx) + 0.1sin(5πx), usando anfis
+%  con datos de entrenamiento y de validaciónws
+%%
+
+%%
+%  El primer paso es generar los datos
+%%
+numPts=200;
+x=linspace(-2,2,numPts)'; 
+y=0.6*sin(pi*x)+0.3*sin(3*pi*x)+0.1*sin(5*pi*x);
+data=[x y];
+%%
+%  Se genera los datos de entrenamiento y los datos de validación
+%%
+trndata=data(1:2:numPts,:); 
+chkdata=data(2:2:numPts,:);  
+
+%%
+%  La gráfica de a ecuación que se va a entrenar se muestra a continuación:
+%%
+figure
+plot(trndata(:,1),trndata(:,2),'o',chkdata(:,1),chkdata(:,2),'x') 
+title('Gráfica de ecuación a estimar');
+
+%%
+%  Se configura el entorno de entrenamiento. Primero, se establece el número y tipo de funciones de pertenencia. Para el tipo de
+%  función, se establece la función por defecto para mostrar el desarrollo básico. Posteriormente, se evaluará cada función
+%%
+
+numMFs=5; 
+mfType='gbellmf';
+
+%%
+%  Se genera la matriz FIS y se visualizan las funciones de pertenencia generadas
+%%
+fismat=genfis1(trndata,numMFs,mfType); 
+
+figure
+[x,mf]=plotmf(fismat,'input',1);
+plot(x,mf);
+title('Funciones de pertenenecia');
+
+%%
+%  A continuación, se establece el número de intentos para entrenar la red, así como su tolerancia al error.
+%%
+
+trnEpoNum=100;
+trnErrGoa=0;
+
+trnOpt=[trnEpoNum trnErrGoa];
+
+%%
+%  Luego, se configuran las opciones que se van a visualizar. Con la opción 1 se muestran las opciones por defecto.
+%%
+
+dispOpt=1;
+
+%%
+%  Se genera una matriz de validación. Debe ser una muestra aleatoria de los datos de entrada, pero para el ejemplo básico, se
+%  dejará por defecto
+%%
+
+trnDataM = []; 
+
+%%
+%  Por último, se genera el tipo de optimización que se va a usar: 0: backpropagation y 1 (defecto): método híbrido
+%%
+optMethod=0;
+
+%%
+%  Por último, se entrena el sistema con los parámetros anteriormente configurados.
+%%
+[fismat1,trnErr,ss]=anfis(trndata,fismat,trnOpt,dispOpt,trnDataM,optMethod);
+
+
+%%
+%  Se evalúa el sistema resultante, encontrando el error cuadrático medio
+%%
+trnOut=evalfis(trndata(:,1),fismat1);
+trnRMSE=norm(trnOut-trndata(:,2))/sqrt(length(trnOut))
+
+%%
+%  Se grafica el error vs los intentos.
+%%
+
+epoch=1:trnEpoNum;
+figure
+plot(epoch,trnErr,'o');
+title('Error vs entrenamientos');
+hold on;
+
+%%
+%  Por último, se visualiza el resultado del sistema entrenado
+%%
+
+anfis_y=evalfis(x(:,1),fismat1);
+figure
+plot(trndata(:,1),trndata(:,2),'o',x,anfis_y,'-')
+title('FIS resultante');
+
+dispOpt=[1 0 0 1];
+
+%%  Función de pertenencia Triangular
+%  Tiene la estructura
+%%
+
+a = 0:0.1:6;b = trimf(a,[2 3 4]);figure;plot(a,b);
+
+%%
+%  Se establece mediante mfType='trimf';
+%%
+
+mfType='trimf';
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+%%  Función de pertenencia Trapezoidal
+%  Tiene la estructura
+%%
+a = 0:0.1:6;b = trapmf(a,[2 3 4 5]);figure;plot(a,b);
+%%
+%  Se establece mediante mfType='trapmf';
+%%
+
+mfType='trapmf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+%%
+%DA ERROR!
+%mfType='trapmf';
+%outmftype='constant';
+%optMethod=1;
+%anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+%
+%outmftype='constant';
+%optMethod=0;
+%anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+%%
+
+%%  Función de pertenencia Campana de Bell general
+%  Tiene la estructura
+%%
+a = 0:0.1:6;b = gbellmf(a,[1 2 3]);figure;plot(a,b);
+%%
+%  Se establece mediante mfType='gbellmf';
+%%
+
+mfType='gbellmf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType='gaussmf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType='gauss2mf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType='pimf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType='dsigmf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+mfType='psigmf';
+
+outmftype='linear';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='linear';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+
+outmftype='constant';
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+##### SOURCE END #####
+--></body></html>
