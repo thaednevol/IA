@@ -465,11 +465,7 @@ anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM
 %  Se evaluaron los diferentes métodos para generar un entrenamiento mediante ANFIS, con parámetros que permiten visualizar cuál
 %  es el mejor, basados en la gráfica resultante, la velocidad con la que llega al error estimado y el error cuadrático medio. 
 %
-%  Entonces, se puede visualizar que las funciones trimf con MFT lineal y método híbrido, gbellmf con MFT lineal y método híbrido, 
-%  gauss2mf con MFT lineal y método híbrido,dsigmf con MFT lineal y método híbrido, y psigmf con MFT lineal y método híbrido
-%  dan los mejores resultados. Como se puede ver, lo que tienen en común es que tienen función de pertenencia lineal y utiliza el
-%  método híbrido, y además, el error cuádratico es menor que 0.1
-%
-%  Más referencia en https://www.mathworks.com/help/fuzzy/index.html
+% 
+%  
 %%
 close all;

@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>myAnfis</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-01"><meta name="DC.source" content="myAnfis.m"><style type="text/css">
+      --><title>APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-07"><meta name="DC.source" content="myAnfis.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,8 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS</a></li><li><a href="#4">DESARROLLO DE UN EJEMPLO</a></li><li><a href="#32">Funci&oacute;n de pertenencia Triangular</a></li><li><a href="#36">Funci&oacute;n de pertenencia Trapezoidal</a></li><li><a href="#42">Funci&oacute;n de pertenencia Campana de Bell general</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>;
-</pre><h2 id="2">APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS</h2><pre>La estructura b&aacute;sica del sistema de inferencia fuzzy de Mamdani es un modelo que mapea caracter&iacute;sticas de entrada a funciones
+  </style></head><body><div class="content"><h1>APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS</h1><!--introduction--><pre>La estructura b&aacute;sica del sistema de inferencia fuzzy de Mamdani es un modelo que mapea caracter&iacute;sticas de entrada a funciones
 de pertenencia de entrada a reglas, reglas a un conjunto de caracter&iacute;sticas de salida, y las funciones de pertenencia de salida
 a valores con salida de 'valoraci&oacute;n-&uacute;nica'o a una decisi&oacute;n asociada con  la salida. Tal sistema usa funciones de pertenencia
 fijas que son escogidas arbitrariamente y una regla de estructura que es esencialmente predeterminada por la interpretaci&oacute;n del
@@ -119,7 +118,7 @@ que comienza el sobreentrenado y, a continuaci&oacute;n, el error del modelo par
 El ajuste excesivo se explica por la prueba del FIS entrenado en los datos de entrenamiento contra los datos de comprobaci&oacute;n
 y eligiendo los par&aacute;metros de la funci&oacute;n de pertenencia como aquellos asociados con el error de comprobaci&oacute;n m&iacute;nimo si estos
 errores indican que el modelo se sobreentrena.</pre><pre>Normalmente, estos conjuntos de datos de entrenamiento y comprobaci&oacute;n se recogen sobre la base de observaciones del sistema
-de destino y luego se almacenan en archivos separados.</pre><h2 id="4">DESARROLLO DE UN EJEMPLO</h2><div><ol><li>Se definen los datos de entrada y salida</li><li>Se genera el FIS</li><li>Se define el entranamiento con el n&uacute;mero de intentos y el error medio cuadr&aacute;tico</li><li>Se entrena el conjunto de datos</li><li>Se validan los resultados</li></ol></div><pre>El problema en cuesti&oacute;n es hacer una aproximaci&oacute;n difusa de la funci&oacute;n y=0.6sin(&#960;x) + 0.3sin(3&#960;x) + 0.1sin(5&#960;x), usando anfis
+de destino y luego se almacenan en archivos separados.</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">DESARROLLO DE UN EJEMPLO</a></li><li><a href="#29">Funci&oacute;n de pertenencia Triangular</a></li><li><a href="#39">Funci&oacute;n de pertenencia Trapezoidal</a></li><li><a href="#48">Funci&oacute;n de pertenencia Campana de Bell general</a></li><li><a href="#58">Funci&oacute;n de pertenencia de Gauss sim&eacute;trica</a></li><li><a href="#68">Funci&oacute;n de pertenencia de Gauss combinada</a></li><li><a href="#78">Funci&oacute;n de pertenencia PI</a></li><li><a href="#88">Funci&oacute;n de pertenencia de diferencia de Sigmoidales</a></li><li><a href="#98">Funci&oacute;n de pertenencia de producto de Sigmoidales</a></li><li><a href="#108">RESULTADOS Y CONCLUSIONES</a></li></ul></div><h2 id="1">DESARROLLO DE UN EJEMPLO</h2><div><ol><li>Se definen los datos de entrada y salida</li><li>Se genera el FIS</li><li>Se define el entranamiento con el n&uacute;mero de intentos y el error medio cuadr&aacute;tico</li><li>Se entrena el conjunto de datos</li><li>Se validan los resultados</li></ol></div><pre>El problema en cuesti&oacute;n es hacer una aproximaci&oacute;n difusa de la funci&oacute;n y=0.6sin(&#960;x) + 0.3sin(3&#960;x) + 0.1sin(5&#960;x), usando anfis
 con datos de entrenamiento y de validaci&oacute;nws</pre><pre>El primer paso es generar los datos</pre><pre class="codeinput">numPts=200;
 x=linspace(-2,2,numPts)';
 y=0.6*sin(pi*x)+0.3*sin(3*pi*x)+0.1*sin(5*pi*x);
@@ -288,12 +287,7 @@ Step size decreases to 0.044139 after epoch 99.
 Designated epoch number reached --&gt; ANFIS training completed at epoch 100.
 
 </pre><pre>Se eval&uacute;a el sistema resultante, encontrando el error cuadr&aacute;tico medio</pre><pre class="codeinput">trnOut=evalfis(trndata(:,1),fismat1);
-trnRMSE=norm(trnOut-trndata(:,2))/sqrt(length(trnOut))
-</pre><pre class="codeoutput">
-trnRMSE =
-
-    0.1535
-
+trnRMSE=norm(trnOut-trndata(:,2))/sqrt(length(trnOut));
 </pre><pre>Se grafica el error vs los intentos.</pre><pre class="codeinput">epoch=1:trnEpoNum;
 figure
 plot(epoch,trnErr,<span class="string">'o'</span>);
@@ -305,20 +299,12 @@ plot(trndata(:,1),trndata(:,2),<span class="string">'o'</span>,x,anfis_y,<span c
 title(<span class="string">'FIS resultante'</span>);
 
 dispOpt=[1 0 0 1];
-</pre><img vspace="5" hspace="5" src="myAnfis_04.png" alt=""> <h2 id="32">Funci&oacute;n de pertenencia Triangular</h2><pre>Tiene la estructura</pre><pre class="codeinput">a = 0:0.1:6;b = trimf(a,[2 3 4]);figure;plot(a,b);
-</pre><img vspace="5" hspace="5" src="myAnfis_05.png" alt=""> <pre>Se establece mediante mfType='trimf';</pre><pre class="codeinput">mfType=<span class="string">'trimf'</span>;
+</pre><img vspace="5" hspace="5" src="myAnfis_04.png" alt=""> <h2 id="29">Funci&oacute;n de pertenencia Triangular</h2><pre>La curva triangular es una funci&oacute;n de un vector, x, y depende de tres par&aacute;metros escalares a, b, y c, dados por</pre><p><img vspace="5" hspace="5" src="trimfs.png" alt=""> </p><pre class="codeinput">a = 0:0.1:6;b = trimf(a,[2 3 4]);figure;plot(a,b);
+</pre><img vspace="5" hspace="5" src="myAnfis_05.png" alt=""> <pre>Se establece mediante mfType='trimf';
+Con el tipo de funci&oacute;n de transferencia de salida lineal y m&eacute;todo h&iacute;brido, el cual es una combinaci&oacute;n de estimaci&oacute;n por m&iacute;nimos
+cuadrados y backpropagation</pre><pre class="codeinput">mfType=<span class="string">'trimf'</span>;
 outmftype=<span class="string">'linear'</span>;
 optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 </pre><pre class="codeoutput">
 ANFIS info: 
@@ -335,7 +321,10 @@ trnRMSE =
 
     0.0665
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_06.png" alt=""> <pre>Con backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -350,7 +339,10 @@ trnRMSE =
 
     0.1687
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_07.png" alt=""> <pre>Con el tipo de funci&oacute;n de transferencia de salida constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -365,7 +357,10 @@ trnRMSE =
 
     0.1233
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_08.png" alt=""> <pre>Con el tipo de funci&oacute;n de transferencia de salida constante y m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -380,15 +375,10 @@ trnRMSE =
 
     0.1228
 
-</pre><img vspace="5" hspace="5" src="myAnfis_06.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_07.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_08.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_09.png" alt=""> <h2 id="36">Funci&oacute;n de pertenencia Trapezoidal</h2><pre>Tiene la estructura</pre><pre class="codeinput">a = 0:0.1:6;b = trapmf(a,[2 3 4 5]);figure;plot(a,b);
-</pre><img vspace="5" hspace="5" src="myAnfis_10.png" alt=""> <pre>Se establece mediante mfType='trapmf';</pre><pre class="codeinput">mfType=<span class="string">'trapmf'</span>;
-
+</pre><img vspace="5" hspace="5" src="myAnfis_09.png" alt=""> <h2 id="39">Funci&oacute;n de pertenencia Trapezoidal</h2><pre>La curva trapezoidal es una funci&oacute;n de un vector, x, y depende de cuatro par&aacute;metros escalares a, b, c y d, dados por</pre><p><img vspace="5" hspace="5" src="trapmf.png" alt=""> </p><pre class="codeinput">a = 0:0.1:6;b = trapmf(a,[2 3 4 5]);figure;plot(a,b);
+</pre><img vspace="5" hspace="5" src="myAnfis_10.png" alt=""> <pre>Se establece mediante mfType='trapmf'. Con mft lineal e h&iacute;brido</pre><pre class="codeinput">mfType=<span class="string">'trapmf'</span>;
 outmftype=<span class="string">'linear'</span>;
 optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 </pre><pre class="codeoutput">
 ANFIS info: 
@@ -405,7 +395,10 @@ trnRMSE =
 
     0.1823
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_11.png" alt=""> <pre>Con backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -420,7 +413,7 @@ trnRMSE =
 
     0.1554
 
-</pre><img vspace="5" hspace="5" src="myAnfis_11.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_12.png" alt=""> <pre class="codeinput"><span class="comment">%DA ERROR!</span>
+</pre><img vspace="5" hspace="5" src="myAnfis_12.png" alt=""> <pre>Con mft constante da error</pre><pre class="codeinput"><span class="comment">%DA ERROR!</span>
 <span class="comment">%mfType='trapmf';</span>
 <span class="comment">%outmftype='constant';</span>
 <span class="comment">%optMethod=1;</span>
@@ -429,113 +422,10 @@ trnRMSE =
 <span class="comment">%outmftype='constant';</span>
 <span class="comment">%optMethod=0;</span>
 <span class="comment">%anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);</span>
-</pre><h2 id="42">Funci&oacute;n de pertenencia Campana de Bell general</h2><pre>Tiene la estructura</pre><pre class="codeinput">a = 0:0.1:6;b = gbellmf(a,[1 2 3]);figure;plot(a,b);
-</pre><img vspace="5" hspace="5" src="myAnfis_13.png" alt=""> <pre>Se establece mediante mfType='gbellmf';</pre><pre class="codeinput">mfType=<span class="string">'gbellmf'</span>;
-
+</pre><h2 id="48">Funci&oacute;n de pertenencia Campana de Bell general</h2><pre>La funci&oacute;n de campana generalizada depende de tres par&aacute;metros a, b, y c dados por</pre><p><img vspace="5" hspace="5" src="gbellmf.png" alt=""> </p><pre>Donde el par&aacute;metro b es usualmente positivo y l par&aacute;metro c localiza el centro de la curva</pre><pre class="codeinput">a = 0:0.1:6;b = gbellmf(a,[1 2 3]);figure;plot(a,b);
+</pre><img vspace="5" hspace="5" src="myAnfis_13.png" alt=""> <pre>Se establece mediante mfType='gbellmf'. Con MFT lineal y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">mfType=<span class="string">'gbellmf'</span>;
 outmftype=<span class="string">'linear'</span>;
 optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-mfType=<span class="string">'gaussmf'</span>;
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-mfType=<span class="string">'gauss2mf'</span>;
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-mfType=<span class="string">'pimf'</span>;
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-mfType=<span class="string">'dsigmf'</span>;
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-mfType=<span class="string">'psigmf'</span>;
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'linear'</span>;
-optMethod=0;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=1;
-anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
-outmftype=<span class="string">'constant'</span>;
-optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 </pre><pre class="codeoutput">
 ANFIS info: 
@@ -552,7 +442,10 @@ trnRMSE =
 
     0.0840
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_14.png" alt=""> <pre>Con backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -567,7 +460,10 @@ trnRMSE =
 
     0.1535
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_15.png" alt=""> <pre>Con mft constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -582,7 +478,10 @@ trnRMSE =
 
     0.1308
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_16.png" alt=""> <pre>Con backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -597,7 +496,12 @@ trnRMSE =
 
     0.1481
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_17.png" alt=""> <h2 id="58">Funci&oacute;n de pertenencia de Gauss sim&eacute;trica</h2><pre>La funci&oacute;n sim&eacute;trica de Gauss depende de dos par&aacute;metros &#963; y c dados por:</pre><p><img vspace="5" hspace="5" src="gaussmf.png" alt=""> </p><pre class="codeinput">a = 0:0.1:10;b = gaussmf(a,[2 5]);figure;plot(a,b);xlabel(<span class="string">'gaussmf, P=[2 5]'</span>)
+</pre><img vspace="5" hspace="5" src="myAnfis_18.png" alt=""> <pre>Se establece mediante mfType='gaussmf'. Con MFT lineal y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">mfType=<span class="string">'gaussmf'</span>;
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -612,7 +516,10 @@ trnRMSE =
 
     0.1520
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_19.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -627,7 +534,10 @@ trnRMSE =
 
     0.1779
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_20.png" alt=""> <pre>Con MFT constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -642,7 +552,10 @@ trnRMSE =
 
     0.1232
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_21.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -657,7 +570,12 @@ trnRMSE =
 
     0.1421
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_22.png" alt=""> <h2 id="68">Funci&oacute;n de pertenencia de Gauss combinada</h2><pre>La funci&oacute;n gaussiana depende de dos par&aacute;metros &#963; y c dados por</pre><p><img vspace="5" hspace="5" src="gauss2mf.png" alt=""> </p><pre class="codeinput">a = [0:0.1:10]';b1 = gauss2mf(a,[2 4 1 8]);b2 = gauss2mf(a,[2 5 1 7]);b3 = gauss2mf(a,[2 6 1 6]);b4 = gauss2mf(a,[2 7 1 5]);b5 = gauss2mf(a,[2 8 1 4]);plot(a,[b1 b2 b3 b4 b5])
+</pre><img vspace="5" hspace="5" src="myAnfis_23.png" alt=""> <pre>Se establece mediante mfType='gauss2mf'. Con MFT lineal y m&eacute;todo h&iacute;brido:</pre><pre class="codeinput">mfType=<span class="string">'gauss2mf'</span>;
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -672,7 +590,10 @@ trnRMSE =
 
     0.0936
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_24.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -687,7 +608,10 @@ trnRMSE =
 
     0.1877
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_25.png" alt=""> <pre>Con MFT constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -702,7 +626,10 @@ trnRMSE =
 
     0.1572
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_26.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -717,7 +644,14 @@ trnRMSE =
 
     0.2073
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_27.png" alt=""> <h2 id="78">Funci&oacute;n de pertenencia PI</h2><pre>Esta curva basada en splines se denomina as&iacute; debido a su forma &#928;. La funci&oacute;n de pertenencia se eval&uacute;a en los puntos
+determinados por el vector x. Los par&aacute;metros a y d ubican los "pies" de la curva, mientras que b y c ubican sus "hombros". La
+funci&oacute;n de pertenencia es un producto de las funciones de membres&iacute;a smf y zmf, y est&aacute; dada por:</pre><p><img vspace="5" hspace="5" src="pimf.png" alt=""> </p><pre class="codeinput">a = 0:0.1:10;b = pimf(a,[1 4 5 10]);plot(a,b);xlabel(<span class="string">'pimf, P = [1 4 5 10]'</span>);ylim([-0.05 1.05])
+</pre><img vspace="5" hspace="5" src="myAnfis_28.png" alt=""> <pre>Se establece mediante mfType='pimf'. Con MFT lineal y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">mfType=<span class="string">'pimf'</span>;
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -732,7 +666,10 @@ trnRMSE =
 
     0.1764
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_29.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -747,7 +684,10 @@ trnRMSE =
 
     0.1428
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_30.png" alt=""> <pre>Con MFT constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -762,7 +702,10 @@ trnRMSE =
 
     0.1116
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_31.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -777,7 +720,15 @@ trnRMSE =
 
     0.1136
 
+</pre><img vspace="5" hspace="5" src="myAnfis_32.png" alt=""> <h2 id="88">Funci&oacute;n de pertenencia de diferencia de Sigmoidales</h2><pre>Diferencia entre dos funciones de membres&iacute;a sigmoidal. La funci&oacute;n de pertenencia sigmoidal utilizada depende de los dos
+par&aacute;metros a y c y est&aacute; dada por</pre><p><img vspace="5" hspace="5" src="dsigmf.png" alt=""> </p><pre>La funci&oacute;n de pertenencia dsigmf depende de cuatro par&aacute;metros, a1, c1, a2 y c2, y es la diferencia entre dos de estas funciones
+sigmoides. F1 (x; a1, c1) - f2 (x; a2, c2). Los par&aacute;metros se listan en el orden: [a1 c1 a2 c2].</pre><pre class="codeinput">a = 0:0.1:10;b = dsigmf(a,[5 2 5 7]);figure;plot(a,b);xlabel(<span class="string">'dsigmf, P = [5 2 5 7]'</span>)
+</pre><img vspace="5" hspace="5" src="myAnfis_33.png" alt=""> <pre>Se establece mediante mfType='dsigmf'. Con MFT lineal y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">mfType=<span class="string">'dsigmf'</span>;
 
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -792,7 +743,10 @@ trnRMSE =
 
     0.0959
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_34.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -807,7 +761,10 @@ trnRMSE =
 
     0.1730
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_35.png" alt=""> <pre>Con MFT constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -822,7 +779,10 @@ trnRMSE =
 
     0.1166
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_36.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -837,7 +797,15 @@ trnRMSE =
 
     0.1212
 
+</pre><img vspace="5" hspace="5" src="myAnfis_37.png" alt=""> <h2 id="98">Funci&oacute;n de pertenencia de producto de Sigmoidales</h2><pre>Producto entre dos funciones de membres&iacute;a sigmoidal. La funci&oacute;n de pertenencia sigmoidal utilizada depende de los dos
+par&aacute;metros a y c y est&aacute; dada por</pre><p><img vspace="5" hspace="5" src="psigmf.png" alt=""> </p><pre>La funci&oacute;n de pertenencia psigmf depende de cuatro par&aacute;metros, a1, c1, a2 y c2, y es el producto entre dos de estas funciones
+sigmoides. F1 (x; a1, c1) x f2 (x; a2, c2). Los par&aacute;metros se listan en el orden: [a1 c1 a2 c2].</pre><pre class="codeinput">a = 0:0.1:10;b = psigmf(a,[5 2 5 7]);figure;plot(a,b);xlabel(<span class="string">'psigmf, P = [5 2 5 7]'</span>)
+</pre><img vspace="5" hspace="5" src="myAnfis_38.png" alt=""> <pre>Se establece mediante mfType='psigmf'. Con MFT lineal y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">mfType=<span class="string">'psigmf'</span>;
 
+outmftype=<span class="string">'linear'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -852,7 +820,10 @@ trnRMSE =
 
     0.0959
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_39.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'linear'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 10
@@ -867,7 +838,10 @@ trnRMSE =
 
     0.1731
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_40.png" alt=""> <pre>Con MFT constante y m&eacute;todo h&iacute;brido</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=1;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -882,7 +856,10 @@ trnRMSE =
 
     0.1171
 
-
+</pre><img vspace="5" hspace="5" src="myAnfis_41.png" alt=""> <pre>Con m&eacute;todo backpropagation</pre><pre class="codeinput">outmftype=<span class="string">'constant'</span>;
+optMethod=0;
+anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+</pre><pre class="codeoutput">
 ANFIS info: 
 	Number of nodes: 24
 	Number of linear parameters: 5
@@ -897,10 +874,13 @@ trnRMSE =
 
     0.1209
 
-</pre><img vspace="5" hspace="5" src="myAnfis_14.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_15.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_16.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_17.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_18.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_19.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_20.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_21.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_22.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_23.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_24.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_25.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_26.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_27.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_28.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_29.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_30.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_31.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_32.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_33.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_34.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_35.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_36.png" alt=""> <img vspace="5" hspace="5" src="myAnfis_37.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="myAnfis_42.png" alt=""> <h2 id="108">RESULTADOS Y CONCLUSIONES</h2><pre>Se evaluaron los diferentes m&eacute;todos para generar un entrenamiento mediante ANFIS, con par&aacute;metros que permiten visualizar cu&aacute;l
+es el mejor, basados en la gr&aacute;fica resultante, la velocidad con la que llega al error estimado y el error cuadr&aacute;tico medio.</pre><pre>Entonces, se puede visualizar que las funciones trimf con MFT lineal y m&eacute;todo h&iacute;brido, gbellmf con MFT lineal y m&eacute;todo h&iacute;brido,
+gauss2mf con MFT lineal y m&eacute;todo h&iacute;brido,dsigmf con MFT lineal y m&eacute;todo h&iacute;brido, y psigmf con MFT lineal y m&eacute;todo h&iacute;brido
+dan los mejores resultados. Como se puede ver, lo que tienen en com&uacute;n es que tienen funci&oacute;n de pertenencia lineal y utiliza el
+m&eacute;todo h&iacute;brido, y adem&aacute;s, el error cu&aacute;dratico es menor que 0.1</pre><pre>M&aacute;s referencia en https://www.mathworks.com/help/fuzzy/index.html</pre><pre class="codeinput">close <span class="string">all</span>;
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-close all;
-
 %%  APRENDIZAJE NEURO-ADAPTATIVO Y ANFIS
 %
 %  La estructura básica del sistema de inferencia fuzzy de Mamdani es un modelo que mapea características de entrada a funciones
@@ -1067,28 +1047,22 @@ optMethod=0;
 %  Por último, se entrena el sistema con los parámetros anteriormente configurados.
 %%
 [fismat1,trnErr,ss]=anfis(trndata,fismat,trnOpt,dispOpt,trnDataM,optMethod);
-
-
 %%
 %  Se evalúa el sistema resultante, encontrando el error cuadrático medio
 %%
 trnOut=evalfis(trndata(:,1),fismat1);
-trnRMSE=norm(trnOut-trndata(:,2))/sqrt(length(trnOut))
-
+trnRMSE=norm(trnOut-trndata(:,2))/sqrt(length(trnOut));
 %%
 %  Se grafica el error vs los intentos.
 %%
-
 epoch=1:trnEpoNum;
 figure
 plot(epoch,trnErr,'o');
 title('Error vs entrenamientos');
 hold on;
-
 %%
 %  Por último, se visualiza el resultado del sistema entrenado
 %%
-
 anfis_y=evalfis(x(:,1),fismat1);
 figure
 plot(trndata(:,1),trndata(:,2),'o',x,anfis_y,'-')
@@ -1097,48 +1071,60 @@ title('FIS resultante');
 dispOpt=[1 0 0 1];
 
 %%  Función de pertenencia Triangular
-%  Tiene la estructura
+%  La curva triangular es una función de un vector, x, y depende de tres parámetros escalares a, b, y c, dados por
+%
+% <<trimfs.png>>
 %%
-
 a = 0:0.1:6;b = trimf(a,[2 3 4]);figure;plot(a,b);
-
 %%
 %  Se establece mediante mfType='trimf';
+%  Con el tipo de función de transferencia de salida lineal y método híbrido, el cual es una combinación de estimación por mínimos
+%  cuadrados y backpropagation
 %%
-
 mfType='trimf';
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+%%
+%  Con backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con el tipo de función de transferencia de salida constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+%%
+%  Con el tipo de función de transferencia de salida constante y método backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 
 %%  Función de pertenencia Trapezoidal
-%  Tiene la estructura
+%  La curva trapezoidal es una función de un vector, x, y depende de cuatro parámetros escalares a, b, c y d, dados por
+%
+% <<trapmf.png>>
 %%
 a = 0:0.1:6;b = trapmf(a,[2 3 4 5]);figure;plot(a,b);
 %%
-%  Se establece mediante mfType='trapmf';
+%  Se establece mediante mfType='trapmf'. Con mft lineal e híbrido
 %%
-
 mfType='trapmf';
-
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con mft constante da error 
 %%
 %DA ERROR!
 %mfType='trapmf';
@@ -1152,119 +1138,223 @@ anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM
 %%
 
 %%  Función de pertenencia Campana de Bell general
-%  Tiene la estructura
+%  La función de campana generalizada depende de tres parámetros a, b, y c dados por
+%
+% <<gbellmf.png>>
+%
+%  Donde el parámetro b es usualmente positivo y l parámetro c localiza el centro de la curva
 %%
 a = 0:0.1:6;b = gbellmf(a,[1 2 3]);figure;plot(a,b);
 %%
-%  Se establece mediante mfType='gbellmf';
+%  Se establece mediante mfType='gbellmf'. Con MFT lineal y método híbrido
 %%
-
 mfType='gbellmf';
-
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con mft constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 
+%%  Función de pertenencia de Gauss simétrica
+%  La función simétrica de Gauss depende de dos parámetros σ y c dados por:
+%
+% <<gaussmf.png>>
+%%
+a = 0:0.1:10;b = gaussmf(a,[2 5]);figure;plot(a,b);xlabel('gaussmf, P=[2 5]')
+%%
+%  Se establece mediante mfType='gaussmf'. Con MFT lineal y método híbrido
+%%
 mfType='gaussmf';
-
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con MFT constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 
+%%  Función de pertenencia de Gauss combinada
+%  La función gaussiana depende de dos parámetros σ y c dados por
+%
+% <<gauss2mf.png>>
+%
+%%
+a = [0:0.1:10]';b1 = gauss2mf(a,[2 4 1 8]);b2 = gauss2mf(a,[2 5 1 7]);b3 = gauss2mf(a,[2 6 1 6]);b4 = gauss2mf(a,[2 7 1 5]);b5 = gauss2mf(a,[2 8 1 4]);plot(a,[b1 b2 b3 b4 b5])
+%%
+%  Se establece mediante mfType='gauss2mf'. Con MFT lineal y método híbrido:
+%%
 mfType='gauss2mf';
-
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con MFT constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 
+%%  Función de pertenencia PI
+%  Esta curva basada en splines se denomina así debido a su forma Π. La función de pertenencia se evalúa en los puntos
+%  determinados por el vector x. Los parámetros a y d ubican los "pies" de la curva, mientras que b y c ubican sus "hombros". La
+%  función de pertenencia es un producto de las funciones de membresía smf y zmf, y está dada por:
+%
+% <<pimf.png>>
+%
+%%
+a = 0:0.1:10;b = pimf(a,[1 4 5 10]);plot(a,b);xlabel('pimf, P = [1 4 5 10]');ylim([-0.05 1.05])
+%%
+%  Se establece mediante mfType='pimf'. Con MFT lineal y método híbrido
+%%
 mfType='pimf';
-
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con MFT constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
 
+%%  Función de pertenencia de diferencia de Sigmoidales
+%  Diferencia entre dos funciones de membresía sigmoidal. La función de pertenencia sigmoidal utilizada depende de los dos
+%  parámetros a y c y está dada por
+%
+% <<dsigmf.png>>
+%
+%  La función de pertenencia dsigmf depende de cuatro parámetros, a1, c1, a2 y c2, y es la diferencia entre dos de estas funciones
+%  sigmoides. F1 (x; a1, c1) - f2 (x; a2, c2). Los parámetros se listan en el orden: [a1 c1 a2 c2]. 
+%%
+a = 0:0.1:10;b = dsigmf(a,[5 2 5 7]);figure;plot(a,b);xlabel('dsigmf, P = [5 2 5 7]')
+%%
+%  Se establece mediante mfType='dsigmf'. Con MFT lineal y método híbrido
+%%
 mfType='dsigmf';
 
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con MFT constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%  Función de pertenencia de producto de Sigmoidales
+%  Producto entre dos funciones de membresía sigmoidal. La función de pertenencia sigmoidal utilizada depende de los dos
+%  parámetros a y c y está dada por
+%
+% <<psigmf.png>>
+%
+%  La función de pertenencia psigmf depende de cuatro parámetros, a1, c1, a2 y c2, y es el producto entre dos de estas funciones
+%  sigmoides. F1 (x; a1, c1) x f2 (x; a2, c2). Los parámetros se listan en el orden: [a1 c1 a2 c2]. 
+%%
+a = 0:0.1:10;b = psigmf(a,[5 2 5 7]);figure;plot(a,b);xlabel('psigmf, P = [5 2 5 7]')
+%%
+%  Se establece mediante mfType='psigmf'. Con MFT lineal y método híbrido
+%%
 mfType='psigmf';
 
 outmftype='linear';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='linear';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con MFT constante y método híbrido
+%%
 outmftype='constant';
 optMethod=1;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
-
+%%
+%  Con método backpropagation
+%%
 outmftype='constant';
 optMethod=0;
 anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM, optMethod);
+%%  RESULTADOS Y CONCLUSIONES
+%  
+%  Se evaluaron los diferentes métodos para generar un entrenamiento mediante ANFIS, con parámetros que permiten visualizar cuál
+%  es el mejor, basados en la gráfica resultante, la velocidad con la que llega al error estimado y el error cuadrático medio. 
+%
+%  Entonces, se puede visualizar que las funciones trimf con MFT lineal y método híbrido, gbellmf con MFT lineal y método híbrido, 
+%  gauss2mf con MFT lineal y método híbrido,dsigmf con MFT lineal y método híbrido, y psigmf con MFT lineal y método híbrido
+%  dan los mejores resultados. Como se puede ver, lo que tienen en común es que tienen función de pertenencia lineal y utiliza el
+%  método híbrido, y además, el error cuádratico es menor que 0.1
+%
+%  Más referencia en https://www.mathworks.com/help/fuzzy/index.html
+%%
+close all;
 ##### SOURCE END #####
 --></body></html>
