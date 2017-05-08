@@ -326,7 +326,8 @@ anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM
 % <<gauss2mf.png>>
 %
 %%
-a = [0:0.1:10]';b1 = gauss2mf(a,[2 4 1 8]);b2 = gauss2mf(a,[2 5 1 7]);b3 = gauss2mf(a,[2 6 1 6]);b4 = gauss2mf(a,[2 7 1 5]);b5 = gauss2mf(a,[2 8 1 4]);plot(a,[b1 b2 b3 b4 b5])
+a = [0:0.1:10]';b1 = gauss2mf(a,[2 4 1 8]);b2 = gauss2mf(a,[2 5 1 7]);b3 = gauss2mf(a,[2 6 1 6]);b4 = gauss2mf(a,[2 7 1 5]);b5 = gauss2mf(a,[2 8 1 4]);figure;
+plot(a,[b1 b2 b3 b4 b5])
 %%
 %  Se establece mediante mfType='gauss2mf'. Con MFT lineal y método híbrido:
 %%
@@ -361,7 +362,7 @@ anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM
 % <<pimf.png>>
 %
 %%
-a = 0:0.1:10;b = pimf(a,[1 4 5 10]);plot(a,b);xlabel('pimf, P = [1 4 5 10]');ylim([-0.05 1.05])
+a = 0:0.1:10;b = pimf(a,[1 4 5 10]);figure;plot(a,b);xlabel('pimf, P = [1 4 5 10]');ylim([-0.05 1.05])
 %%
 %  Se establece mediante mfType='pimf'. Con MFT lineal y método híbrido
 %%
