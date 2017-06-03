@@ -1,4 +1,6 @@
-function out=filabinaria2celdabinaria(X)
+function out=FilBin2CelBin(X)
+
+out=zeros(length(X),size(X,2));
 
 for i=1:length(X)
     A=num2str(X(i,:));

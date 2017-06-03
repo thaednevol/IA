@@ -1,4 +1,4 @@
-function out=fb2cd(X)
+function out=FilBin2CelDec(X)
 
 for i=1:length(X)
     A=num2str(X(i,:));

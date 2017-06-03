@@ -44,8 +44,8 @@ X1b=FilBin2CelBin(X1);
 X2b=FilBin2CelBin(X2);
 
 %Fila binaria a celda decimal
-X1t=FilBin2CelDec(X1);
-X2t=FilBin2CelDec(X2);
+X1t=fb2cd(X1);
+X2t=fb2cd(X2);
 
 %X real
 %Celda decimal a numero real
@@ -112,22 +112,21 @@ end
 padre=padre_temp(1:k-1,:);
 
 %2. Se genera una matriz de números aleatorios enteros entre [2 , No de bits -1]
-r=randi([2 tamano_cromosomas-1],numero_poblacion_inicial,1);
+r=randi([2 tamano_cromosomas-1],length(padre),1);
 
 i=1;
 j=1;
-Vh=zeros(numero_poblacion_inicial,tamano_cromosomas);
-
-while i<numero_poblacion_inicial
-    rl=r(i);
-    [padre1,padre2]=traerPareja(padre);
-    p1=padre1(1:rl);
-    p2=padre2(rl+1:end);
+Vh=zeros(ceil(length(padre)/2),tamano_cromosomas);
+while i<(length(padre))
+    rl=r(j);
+    p1=padre(i,1:rl);
+    p2=padre(i+1,rl+1:end);
     Vh(i,:)=[p1 p2];
-    p3=padre1(rl+1:end);
-    p4=padre2(1:rl);
+    p3=padre(i,rl+1:end);
+    p4=padre(i+1,1:rl);
     Vh(i+1,:)=[p3 p4];
-    i=i+1;
+    i=i+2;
+    j=j+1;
 end
 
 %Para la mutación, se vuelve a generar una matriz de números aleatorios, que serviran para evaluar
@@ -143,6 +142,22 @@ end
 B=Vh;
 C=A==B;
 
+
+
+
+
+
+
+
+
+
+
+
+%size(A)
+%bin2dec(A)
+%Xt1=str2real(
+%bin2dec(A)
+
 % 1 Numero de variables
 % 2 Limites inferior y superior
 % 3 Precision
@@ -150,3 +165,6 @@ C=A==B;
 % 5 Probabilidad de cruce
 % 6. Probabilidad de mutacion
 % 8 Numero de generaciones
+
+
+    
