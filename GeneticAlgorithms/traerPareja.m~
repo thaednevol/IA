@@ -1,3 +1,0 @@
-function [p1 p2]=traerPareja(padres)
-
-i=round(length(padres)*rand(1,1));
