@@ -1,8 +1,8 @@
-%%  ALGORITMO GENETICO - CASO OPTIMIZACI�N MANTENIMIENTO
+%%  ALGORITMO GENETICO - CASO OPTIMIZACION MANTENIMIENTO
 %  Solucion al algoritmo
 %%
 clc;
-clear all;
+clear all
 close all;
 %Maq=input('Ingrese numero de maquinas: ')
 %Act=input('Ingrese numero de actividades de mantenimiento preventivo: ')

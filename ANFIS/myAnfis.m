@@ -473,4 +473,4 @@ anfis_t(trndata, numMFs,mfType,outmftype,trnEpoNum, trnErrGoa, dispOpt, trnDataM
 %
 %  Más referencia en https://www.mathworks.com/help/fuzzy/index.html
 %%
-close all;
+%close all;

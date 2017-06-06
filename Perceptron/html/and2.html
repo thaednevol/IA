@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Perceptr&oacute;n (AND 2 entradas)</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-14"><meta name="DC.source" content="and2.m"><style type="text/css">
+      --><title>Perceptr&oacute;n (AND 2 entradas)</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-05"><meta name="DC.source" content="and2.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,7 +71,7 @@ aprendizaje de clasificaci&oacute;n supervisado. Bajo las correctas
 suposiciones, el procedimiento de aprendizaje iterativo converge a los
 pesos correctos, es decir, a los pesos que permiten que la red produzca
 la salida deseada. Se analiza los diferentes m&eacute;todos variando los pesos
-iniciales y la tasa de aprendizaje.</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Definici&oacute;n del algoritmo base</a></li><li><a href="#2">Desarrollo del algoritmo</a></li><li><a href="#15">Primer m&eacute;todo</a></li><li><a href="#17">Segundo m&eacute;todo</a></li><li><a href="#20">Tercer m&eacute;todo</a></li><li><a href="#23">An&aacute;lisis de los m&eacute;todos</a></li></ul></div><h2>Definici&oacute;n del algoritmo base<a name="1"></a></h2><pre>El algoritmo usado es el siguiente:</pre><div><ol><li>Se ingresan las entradas</li><li>Se ingresan las salidas</li><li>Se definen los pesos (se ingresan o se generan aleatoriamente)</li><li>Se define el umbral y la tasa de aprendizaje, si es necesario</li><li>Se calcula la salida a partir de la ecuaci&oacute;n lineal para la fila   seleccionada</li><li>Se compara esa salida con el umbral para la definci&oacute;n de la salida   para comparar</li><li>Se compara la salida del punto 6 con la salida que se ingres&oacute; en el   punto 2. Si no son iguales, se ajustan los pesos de acuerdo al m&eacute;todo.   Si son iguales, se acepta ese peso</li><li>Se contin&uacute;a con la siguiente fila y se dirige al paso 5</li></ol></div><h2>Desarrollo del algoritmo<a name="2"></a></h2><pre>El primer paso opcional es borrar todas las variables anteriores y
+iniciales y la tasa de aprendizaje.</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Definici&oacute;n del algoritmo base</a></li><li><a href="#2">Desarrollo del algoritmo</a></li><li><a href="#15">Primer m&eacute;todo</a></li><li><a href="#19">Segundo m&eacute;todo</a></li><li><a href="#22">Tercer m&eacute;todo</a></li><li><a href="#25">An&aacute;lisis de los m&eacute;todos</a></li></ul></div><h2 id="1">Definici&oacute;n del algoritmo base</h2><pre>El algoritmo usado es el siguiente:</pre><div><ol><li>Se ingresan las entradas</li><li>Se ingresan las salidas</li><li>Se definen los pesos (se ingresan o se generan aleatoriamente)</li><li>Se define el umbral y la tasa de aprendizaje, si es necesario</li><li>Se calcula la salida a partir de la ecuaci&oacute;n lineal para la fila   seleccionada</li><li>Se compara esa salida con el umbral para la definci&oacute;n de la salida   para comparar</li><li>Se compara la salida del punto 6 con la salida que se ingres&oacute; en el   punto 2. Si no son iguales, se ajustan los pesos de acuerdo al m&eacute;todo.   Si son iguales, se acepta ese peso</li><li>Se contin&uacute;a con la siguiente fila y se dirige al paso 5</li></ol></div><h2 id="2">Desarrollo del algoritmo</h2><pre>El primer paso opcional es borrar todas las variables anteriores y
 limpiar el espacio de trabajo</pre><pre class="codeinput">clear <span class="string">all</span>;
 close <span class="string">all</span>;
 clc;
@@ -103,7 +103,73 @@ Xi = [x0;x1;x2];
      plot(Xi(2,j),Xi(3,j),<span class="string">'--rs'</span>)
  <span class="keyword">end</span>
  <span class="keyword">end</span>
-</pre><img vspace="5" hspace="5" src="and2_01.png" alt=""> <h2>Primer m&eacute;todo<a name="15"></a></h2><p>En este primer m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a las salidas <a href="include&gt;perceptron_metodo1.m</include">include&gt;perceptron_metodo1.m&lt;/include</a></p><h2>Segundo m&eacute;todo<a name="17"></a></h2><p>En este segundo m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a la diferencia de las salidas y las entradas</p><pre class="language-matlab">
+</pre><img vspace="5" hspace="5" src="and2_01.png" alt=""> <h2 id="15">Primer m&eacute;todo</h2><p>En este primer m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a las salidas</p><pre class="language-matlab">
+<span class="keyword">function</span> [Wf,Yf,N] = perceptron_metodo1(Wi,Xi,Yi,umbral);
+
+<span class="keyword">if</span> length(Wi)~=size(Xi,1)
+    <span class="keyword">return</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> length(Wi)~=size(Xi,1)
+    <span class="keyword">return</span>;
+<span class="keyword">end</span>
+
+<span class="comment">%NUMERO DE ITERACIONES</span>
+N=0;
+<span class="comment">%NUMERO DE SALIDAS</span>
+k=length(Yi);
+
+<span class="comment">%NUMERO DE ENTRADAS O COEFICIENTES</span>
+coefIndex=length(Wi);
+
+<span class="comment">%VALIDADOR DEL ALGORITMO</span>
+validador=0;
+
+    <span class="keyword">while</span> validador&lt;k 
+    validador=0;
+    N=N+1;
+        <span class="keyword">for</span> i=1:1:k
+            <span class="comment">%FUNCION DE SUMA</span>
+            f(i)=0;
+            <span class="keyword">for</span> j=1:1:coefIndex
+                f(i)=f(i)+Wi(j)*Xi(j,i);
+            <span class="keyword">end</span>
+            <span class="comment">%SE COMPARA CON EL UMBRAL</span>
+            <span class="keyword">if</span> f(i)&lt;umbral
+                Yd(i)=-1;
+            <span class="keyword">else</span>
+                Yd(i)=1;
+            <span class="keyword">end</span>
+
+            <span class="comment">%FUNCION DELTA</span>
+            fd=1;
+            <span class="keyword">if</span> Yd(i)==Yi(i)
+                validador=validador+1;   
+            <span class="keyword">else</span>
+<span class="comment">                %%</span>
+                <span class="comment">% METODO 1: RED HEBB</span>
+                <span class="comment">% En este m&eacute;todo la funci&oacute;n delta de ajuste es igual a la</span>
+                <span class="comment">% funci&oacute;n de salida</span>
+<span class="comment">                %%</span>
+                fd=Yi(i);
+                <span class="comment">%AJUSTE DE COEFICIENTES</span>
+                <span class="keyword">for</span> j=1:1:coefIndex
+                    Wi(j)=Wi(j)+Xi(j,i)*fd;
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            Wf=Wi;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="comment">%INGRESA LA SALIDA A LA SOLUCION</span>
+    <span class="keyword">for</span> i=1:1:k
+        Yf(i)=0;
+        <span class="keyword">for</span> j=1:1:coefIndex
+            Yf(i)=Yf(i)+Wi(j)*Xi(j,i);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre><h2 id="19">Segundo m&eacute;todo</h2><p>En este segundo m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a la diferencia de las salidas y las entradas</p><pre class="language-matlab">
 <span class="keyword">function</span> [Wf,Yf,N] = perceptron_metodo2(Wi,Xi,Yi,umbral);
 
 <span class="keyword">if</span> length(Wi)~=size(Xi,1)
@@ -165,7 +231,7 @@ validador=0;
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 
-</pre><h2>Tercer m&eacute;todo<a name="20"></a></h2><p>En este tercer m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a la diferencia de las salidas y las entradas, multiplicadas por una coeficiente de aprendizaje alfa</p><pre class="language-matlab">
+</pre><h2 id="22">Tercer m&eacute;todo</h2><p>En este tercer m&eacute;todo la funci&oacute;n delta de ajuste de los pesos es igual a la diferencia de las salidas y las entradas, multiplicadas por una coeficiente de aprendizaje alfa</p><pre class="language-matlab">
 <span class="keyword">function</span> [Wf,Yf,N] = perceptron_metodo3(Wi,Xi,Yi,umbral,alpha);
 
 <span class="keyword">if</span> length(Wi)~=size(Xi,1)
@@ -227,7 +293,7 @@ validador=0;
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 
-</pre><h2>An&aacute;lisis de los m&eacute;todos<a name="23"></a></h2><p>Para hacer una comparativa de los algoritmos, el enfoque usado es analizar el tercer algoritmo en b&uacute;squeda de ciertas variables adecuadas con determinados coeficientes de aprendizaje para obtener con cual alfa se tiene una respuesta m&aacute;s r&aacute;pida, cual tiene m&aacute;s variaci&oacute;n de peso y cual tiene mas iteraciones.</p><p>El primer enfoque ser&aacute; medir el tiempo promedio de diferentes coeficientes</p><pre class="codeinput"> j=1;
+</pre><h2 id="25">An&aacute;lisis de los m&eacute;todos</h2><p>Para hacer una comparativa de los algoritmos, el enfoque usado es analizar el tercer algoritmo en b&uacute;squeda de ciertas variables adecuadas con determinados coeficientes de aprendizaje para obtener con cual alfa se tiene una respuesta m&aacute;s r&aacute;pida, cual tiene m&aacute;s variaci&oacute;n de peso y cual tiene mas iteraciones.</p><p>El primer enfoque ser&aacute; medir el tiempo promedio de diferentes coeficientes</p><pre class="codeinput"> j=1;
  <span class="keyword">for</span> alpha=0.1:0.1:10
      t=0;
      <span class="keyword">for</span> i=1:1:100
@@ -369,17 +435,17 @@ validador=0;
 </pre><pre class="codeoutput">
 NiM1 =
 
-   411
+   406
 
 
 NiM2 =
 
-   525
+   530
 
 
 NiM3 =
 
-   220
+   228
 
 </pre><p>A continuaci&oacute;n se evaluar&aacute; el tiempo que se demora cada algoritmo</p><pre class="codeinput"> TuM1=0; <span class="comment">%Tiempo usado por el m&eacute;todo 1</span>
  TuM2=0; <span class="comment">%Tiempo usado por el m&eacute;todo 3</span>
@@ -412,17 +478,17 @@ NiM3 =
 </pre><pre class="codeoutput">
 TuM1 =
 
-    0.0111
+    0.0089
 
 
 TuM2 =
 
-    0.0114
+    0.0088
 
 
 TuM3 =
 
-    0.0092
+    0.0071
 
 </pre><p>Por &uacute;ltimo, se eval&uacute;a la diferencia de pesos entre los 3 algoritmos</p><pre class="codeinput"> DpM1W0=0; <span class="comment">%Diferencia de pesos w0 resultante del m&eacute;todo 1</span>
  DpM1W1=0; <span class="comment">%Diferencia de pesos w1 resultante del m&eacute;todo 1</span>
@@ -472,19 +538,19 @@ TuM3 =
 </pre><pre class="codeoutput">
 DpM1 =
 
-    60   118    44
+    74   114    52
 
 
 DpM2 =
 
-   352   352   176
+   320   320   160
 
 
 DpM3 =
 
-   25.8000   30.3000   30.0000
+   22.2000   25.8000   27.3000
 
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %%  Perceptrón (AND 2 entradas)
 %
@@ -588,6 +654,8 @@ umbral=2;
  %
  % En este primer método la función delta de ajuste de los pesos es igual a
  % las salidas
+ %%
+ %%
  % <include>perceptron_metodo1.m</include>
  %%
  %% Segundo método
