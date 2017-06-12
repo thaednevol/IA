@@ -1,0 +1,304 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GRAFICA DE LA FUNCI&Oacute;N C&Uacute;BICA MEDIANTE UNA RNA</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-11"><meta name="DC.source" content="CF.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>GRAFICA DE LA FUNCI&Oacute;N C&Uacute;BICA MEDIANTE UNA RNA</h1><!--introduction--><p>Utilizar los comandos de MATLAB para realizar el entrenamiento y la posterior validaci&oacute;n de la RNA que genere la respuesta de una funci&oacute;n c&uacute;bica, mediante MATLAB, usando el comando newff</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">NEWFF</a></li><li><a href="#3">Algoritmo usado</a></li><li><a href="#19">Funci&oacute;n feedforwardnet</a></li><li><a href="#29">Conclusiones</a></li></ul></div><h2 id="1">NEWFF</h2><p>El comndo newff de MATLAB crea una red con el algoritmo de backpropagtion con realimentaci&oacute;n (feed-forward) el cual consiste en Nl capas, usando la funci&oacute;n de peso DOTPROD, la funci&oacute;n de entrada de red NETSUM y las funciones de transferencia especificadas</p><p>La primera capa tiene pesos procedentes de la entrada. Cada capa posterior tiene un peso procedente de la capa anterior. Todas las capas tienen sesgos. La &uacute;ltima capa es la salida de red. Los pesos y sesgos de cada capa se inicializan con INITNW.</p><p>La adaptaci&oacute;n se hace con TRAINS, que actualiza las ponderaciones con la funci&oacute;n de aprendizaje especificada. El entrenamiento se realiza con la funci&oacute;n de entrenamiento especificada. El rendimiento se mide de acuerdo con la funci&oacute;n de rendimiento especificada.</p><pre class="codeinput">close <span class="string">all</span>
+clear <span class="string">all</span>
+clc
+</pre><h2 id="3">Algoritmo usado</h2><p>1) Definimos las entradas y salidas deseadas para el entrenamiento y la validaci&oacute;n</p><pre class="codeinput">entradas =-5:1:5;
+salidas = entradas.^3;
+
+entradas_v=-5:0.1:5;
+salidas_v = entradas_v.^3;
+</pre><p>La gr&aacute;fica de la funci&oacute;n resultante se muestra a continuaci&oacute;n:</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plot(entradas_v,salidas_v,<span class="string">'g'</span>);
+title(<span class="string">'Salida deseada'</span>)
+xlabel(<span class="string">'x'</span>)
+ylabel(<span class="string">'Y = x^3'</span>)
+grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_01.png" alt=""> <p>2) Se crea la red con los valores establecidos y los par&aacute;metros por defecto {'tansig' 'purelin'}, el n&uacute;mero de iteraciones a usar (epochs=1000) y el objetivo (goal=0.0001). Se asigna a la variable cubica y la funci&oacute;n de transferencia generada a tr</p><pre class="codeinput">cubica = newff(minmax(entradas),[5 1],{<span class="string">'tansig'</span> <span class="string">'purelin'</span>});
+cubica.trainParam.epochs = 1000;
+cubica.trainParam.goal = 0.0001;
+[cubica,tr] = train(cubica,entradas,salidas);
+</pre><pre class="codeoutput">Warning: NEWFF used in an obsolete way. 
+          See help for NEWFF to update calls to the new argument list.
+ 
+</pre><img vspace="5" hspace="5" src="CF_02.png" alt=""> <p>3) Se simulan las entradas de entrenamiento y validaci&oacute;n.</p><pre class="codeinput">Y = sim(cubica,entradas);
+V = sim(cubica,entradas_v);
+</pre><p>Se grafican las salidas</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plot(entradas,salidas,<span class="string">'g'</span>);
+grid <span class="string">on</span>;
+hold <span class="string">on</span>;
+plot(entradas,Y,<span class="string">'ro'</span>);
+hold <span class="string">on</span>;
+plot(entradas_v,V,<span class="string">'bx'</span>);
+title(<span class="string">'Comportamiento de la RNA'</span>)
+xlabel(<span class="string">'x'</span>)
+ylabel(<span class="string">'Y = x^3'</span>)
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_03.png" alt=""> <p>Gr&aacute;fica del desempe&ntilde;o de la red</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plotperform(tr);
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_04.png" alt=""> <p>Gr&aacute;fica de los par&aacute;metros Gradiente, Mu y las validaciones</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plottrainstate(tr);
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_05.png" alt=""> <p>Gr&aacute;fica de la regresi&oacute;n de los datos</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+y=cubica(entradas);
+pr=plotregression(salidas,y,<span class="string">'Regression'</span>);
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_06.png" alt=""> <h2 id="19">Funci&oacute;n feedforwardnet</h2><p>La funci&oacute;n newff qued&oacute; obsoleta a partir de la versi&oacute;n de 2010b. A partir de ese momento, se recomienda la funci&oacute;n feedforwardnet.</p><p>Esta funci&oacute;n toma como argumentos el n&uacute;mero de capas ocultas y opcionalmente la funci&oacute;n de entrenamiento, por defecto 'trainlm'. As&iacute;, para desarrollar el algoritmo se hace:</p><pre class="codeinput">perf=zeros();
+<span class="keyword">for</span> i=1:1:5
+</pre><pre class="codeinput">    cubica = feedforwardnet(i);
+    cubica.trainParam.epochs=1000;
+    cubica.trainParam.goal=0.0001;
+    [cubica,tr] = train(cubica,entradas,salidas);
+    y=cubica(entradas);
+    Y = sim(cubica,entradas);
+    V = sim(cubica,entradas_v);
+
+    figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+    plot(entradas,salidas,<span class="string">'g'</span>);
+    grid <span class="string">on</span>;
+    hold <span class="string">on</span>;
+    plot(entradas,Y,<span class="string">'ro'</span>);
+    hold <span class="string">on</span>;
+    plot(entradas_v,V,<span class="string">'bx'</span>);
+    title([<span class="string">'Comportamiento de la RNA con feedforwardnet, numero de capas= '</span>, num2str(i)])
+    xlabel(<span class="string">'x'</span>)
+    ylabel(<span class="string">'Y = x^3'</span>)
+    perf(i) = perform(cubica,y,salidas);
+</pre><img vspace="5" hspace="5" src="CF_07.png" alt=""> <img vspace="5" hspace="5" src="CF_11.png" alt=""> <img vspace="5" hspace="5" src="CF_15.png" alt=""> <img vspace="5" hspace="5" src="CF_19.png" alt=""> <img vspace="5" hspace="5" src="CF_23.png" alt=""> <p>Gr&aacute;fica del desempe&ntilde;o de la red</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plotperform(tr);
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_08.png" alt=""> <img vspace="5" hspace="5" src="CF_12.png" alt=""> <img vspace="5" hspace="5" src="CF_16.png" alt=""> <img vspace="5" hspace="5" src="CF_20.png" alt=""> <img vspace="5" hspace="5" src="CF_24.png" alt=""> <p>Gr&aacute;fica de los par&aacute;metros Gradiente, Mu y las validaciones</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plottrainstate(tr);
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="CF_09.png" alt=""> <img vspace="5" hspace="5" src="CF_13.png" alt=""> <img vspace="5" hspace="5" src="CF_17.png" alt=""> <img vspace="5" hspace="5" src="CF_21.png" alt=""> <img vspace="5" hspace="5" src="CF_25.png" alt=""> <p>Gr&aacute;fica de la regresi&oacute;n de los datos</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+y=cubica(entradas);
+pr=plotregression(salidas,y,<span class="string">'Regression'</span>);
+grid <span class="string">on</span>
+hold <span class="string">on</span>
+
+    cubica=zeros();
+</pre><img vspace="5" hspace="5" src="CF_10.png" alt=""> <img vspace="5" hspace="5" src="CF_14.png" alt=""> <img vspace="5" hspace="5" src="CF_18.png" alt=""> <img vspace="5" hspace="5" src="CF_22.png" alt=""> <img vspace="5" hspace="5" src="CF_26.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="29">Conclusiones</h2><div><ol><li>Se hicieron variaciones con las entradas para determinar cual da el mejor entrenamiento. Entre m&aacute;s pasos tengan las entradas y las salidas, una mejor correspondencia se tiene de la red.</li><li>Con los valores iniciales de entrada y salida, no se puede concluir con cuantas capas la red es &oacute;ptima. Si se introducen m&aacute;s pasos, a partir de 2 capas la red tiene buenos resultados</li><li>Es necesario evaluar m&aacute;s funciones de transferencia, n&uacute;mero de iteraciones, funciones de entrenamiento, entre otros par&aacute;metros</li></ol></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% GRAFICA DE LA FUNCIÓN CÚBICA MEDIANTE UNA RNA
+%
+% Utilizar los comandos de MATLAB para realizar el entrenamiento y la posterior validación de la RNA que genere la respuesta de
+% una función cúbica, mediante MATLAB, usando el comando newff
+%%
+%%  NEWFF
+% El comndo newff de MATLAB crea una red con el algoritmo de backpropagtion con realimentación (feed-forward) el cual consiste en
+% Nl capas, usando la función de peso DOTPROD, la función de entrada de red NETSUM y las funciones de transferencia especificadas
+%
+% La primera capa tiene pesos procedentes de la entrada. Cada capa posterior tiene un peso procedente de la capa anterior. Todas
+% las capas tienen sesgos. La última capa es la salida de red. Los pesos y sesgos de cada capa se inicializan con INITNW.
+%
+% La adaptación se hace con TRAINS, que actualiza las ponderaciones con la función de aprendizaje especificada. El entrenamiento
+% se realiza con la función de entrenamiento especificada. El rendimiento se mide de acuerdo con la función de rendimiento
+% especificada.
+%%
+close all
+clear all
+clc
+%%  Algoritmo usado
+% 1) Definimos las entradas y salidas deseadas para el entrenamiento y la
+% validación
+%%
+entradas =-5:1:5;
+salidas = entradas.^3;
+
+entradas_v=-5:0.1:5;
+salidas_v = entradas_v.^3;
+%%
+% La gráfica de la función resultante se muestra a continuación:
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plot(entradas_v,salidas_v,'g');
+title('Salida deseada')
+xlabel('x')
+ylabel('Y = x^3')
+grid on
+%%
+% 2) Se crea la red con los valores establecidos y los parámetros por defecto {'tansig' 'purelin'}, el número de iteraciones a
+% usar (epochs=1000) y el objetivo (goal=0.0001). Se asigna a la variable cubica y la función de transferencia generada a tr
+%%
+cubica = newff(minmax(entradas),[5 1],{'tansig' 'purelin'});
+cubica.trainParam.epochs = 1000;
+cubica.trainParam.goal = 0.0001;
+[cubica,tr] = train(cubica,entradas,salidas);
+%%
+% 3) Se simulan las entradas de entrenamiento y validación.
+%%
+Y = sim(cubica,entradas);
+V = sim(cubica,entradas_v);
+%%
+% Se grafican las salidas
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plot(entradas,salidas,'g');
+grid on;
+hold on;
+plot(entradas,Y,'ro');
+hold on;
+plot(entradas_v,V,'bx');
+title('Comportamiento de la RNA')
+xlabel('x')
+ylabel('Y = x^3')
+grid on
+hold on
+%%
+% Gráfica del desempeño de la red
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plotperform(tr);
+grid on
+hold on
+%%
+% Gráfica de los parámetros Gradiente, Mu y las validaciones
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plottrainstate(tr);
+grid on
+hold on
+%%
+% Gráfica de la regresión de los datos
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+y=cubica(entradas);
+pr=plotregression(salidas,y,'Regression');
+grid on
+hold on
+%% Función feedforwardnet
+% La función newff quedó obsoleta a partir de la versión de 2010b. A partir de ese momento, se recomienda la función
+% feedforwardnet.
+%
+% Esta función toma como argumentos el número de capas ocultas y opcionalmente la función de entrenamiento, por defecto 'trainlm'.
+% Así, para desarrollar el algoritmo se hace:
+%%
+perf=zeros();
+for i=1:1:5
+    cubica = feedforwardnet(i);
+    cubica.trainParam.epochs=1000;
+    cubica.trainParam.goal=0.0001;
+    [cubica,tr] = train(cubica,entradas,salidas);
+    y=cubica(entradas);
+    Y = sim(cubica,entradas);
+    V = sim(cubica,entradas_v);
+
+    figure('units','normalized','outerposition',[0 0 1 1])
+    plot(entradas,salidas,'g');
+    grid on;
+    hold on;
+    plot(entradas,Y,'ro');
+    hold on;
+    plot(entradas_v,V,'bx');
+    title(['Comportamiento de la RNA con feedforwardnet, numero de capas= ', num2str(i)])
+    xlabel('x')
+    ylabel('Y = x^3')
+    perf(i) = perform(cubica,y,salidas);
+    %%
+% Gráfica del desempeño de la red
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plotperform(tr);
+grid on
+hold on
+%%
+% Gráfica de los parámetros Gradiente, Mu y las validaciones
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plottrainstate(tr);
+grid on
+hold on
+%%
+% Gráfica de la regresión de los datos
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+y=cubica(entradas);
+pr=plotregression(salidas,y,'Regression');
+grid on
+hold on
+
+    cubica=zeros();
+end
+
+%% Conclusiones
+% # Se hicieron variaciones con las entradas para determinar cual da el mejor entrenamiento. Entre más pasos tengan las entradas y
+% las salidas, una mejor correspondencia se tiene de la red.
+% # Con los valores iniciales de entrada y salida, no se puede concluir con cuantas capas la red es óptima. Si se introducen
+% más pasos, a partir de 2 capas la red tiene buenos resultados
+% # Es necesario evaluar más funciones de transferencia, número de iteraciones, funciones de entrenamiento, entre otros parámetros
+##### SOURCE END #####
+--></body></html>
