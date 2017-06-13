@@ -1,6 +1,6 @@
 function out=FilBin2CelDec(X)
 
-for i=1:length(X)
+for i=1:size(X,1)
     A=num2str(X(i,:));
     n=size(A,1);
     %Como quedan espacios en blanco, se quitan:
