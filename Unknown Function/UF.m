@@ -1,47 +1,98 @@
-%% GRAFICA DE LA FUNCIÓN CÚBICA MEDIANTE UNA RNA
+%% GRAFICA DE LA FUNCIÓN DESCONOCIDA MEDIANTE UNA RNA
 %
 % Utilizar los comandos de MATLAB para realizar el entrenamiento y la posterior validación de la RNA que genere la respuesta de
-% una función cúbica, mediante MATLAB, usando el comando newff
+% una función desconocida, mediante MATLAB
 %%
-%%  NEWFF
-% El comndo newff de MATLAB crea una red con el algoritmo de backpropagtion con realimentación (feed-forward) el cual consiste en
-% Nl capas, usando la función de peso DOTPROD, la función de entrada de red NETSUM y las funciones de transferencia especificadas
-%
-% La primera capa tiene pesos procedentes de la entrada. Cada capa posterior tiene un peso procedente de la capa anterior. Todas
-% las capas tienen sesgos. La última capa es la salida de red. Los pesos y sesgos de cada capa se inicializan con INITNW.
-%
-% La adaptación se hace con TRAINS, que actualiza las ponderaciones con la función de aprendizaje especificada. El entrenamiento
-% se realiza con la función de entrenamiento especificada. El rendimiento se mide de acuerdo con la función de rendimiento
-% especificada.
-%%
-close all
-clear all
-clc
-%%  Algoritmo usado
-% 1) Definimos las entradas y salidas deseadas para el entrenamiento y la
-% validación
-%%
-entradas =-20:1:20;
-salidas = [0.0875 0.0002 0.0366 0.3178 0.8151 1.2631 1.1523 -0.4252 0.5477 1.2055 1.2309 0.7715 0.2621 0.0223 -0.0014 -0.1190 -0.5309 -1.0681 -1.2961 -0.9002  0 0.9002 -1.2961  1.0681  0.5309  0.1190  0.0014 -0.0223 -0.2621 -0.7715 -1.2309 -1.2055 -0.5477  0.4252  1.1523 1.2631  0.8151  0.3178  0.0366  0.0002  0.0875];
-
 %% Función feedforwardnet
-% La función newff quedó obsoleta a partir de la versión de 2010b. A partir de ese momento, se recomienda la función
-% feedforwardnet.
 %
-% Esta función toma como argumentos el número de capas ocultas y opcionalmente la función de entrenamiento, por defecto 'trainlm'.
-% Así, para desarrollar el algoritmo se hace:
+% Las redes feedforward consisten en una serie de capas. La primera capa tiene una conexión desde la entrada de red. Cada capa
+% posterior tiene una conexión de la capa anterior. La capa final produce la salida de la red.
+% 
+% Las redes Feedforward se pueden utilizar para cualquier tipo de mapeo de entrada a salida. Una red feedforward con una capa
+% oculta y suficientes neuronas en las capas ocultas, puede adaptarse a cualquier problema de mapeo de entrada-salida finito.
+% 
+% Las versiones especializadas de la red feedforward incluyen redes de ajuste (fitnet) y reconocimiento de patrones (patternnet).
+% Una variación en la red de feedforward es la red en cascada (cascadeforwardnet) que tiene conexiones adicionales desde la
+% entrada a cada capa, y de cada capa a todas las capas siguientes.
+%%
+%% Problema
+%
+% Encontrar una red neural que permita la solución de tener las siguientes entradas y salidas
+entradas =-20:1:20;
+sal1=[0.0875,0.0002,0.0366,0.3178 0.8151 1.2631 1.1523 -0.4252 0.5477 1.2055 1.2309 0.7715 0.2621 0.0223 -0.0014 -0.1190 -0.5309 -1.0681 -1.2961 -0.9002];
+sal2=[0 0.9002 -1.2961 1.0681 0.5309 0.1190 0.0014 -0.0223 -0.2621 -0.7715 -1.2309 -1.2055 -0.5477 0.4252 1.1523 1.2631 0.8151 0.3178  0.0366  0.0002  0.0875];
+salidas = [ sal1 sal2 ]; 
+%% Solucion
+%
+% La forma básica de definición y entrenamiento de la red es:
+%
 %%
 desc = feedforwardnet;
 [desc,tr] = train(desc,entradas,salidas);
 Y = sim(desc,entradas);
+%%
+%  donde feedforward toma como parámetros el número de capas ocultas que por defecto son 10 y el número la función de
+%  entrenamiento, la que por defecto es trainlm
+%
+% Se grafican la salida deseada con la obtenida por defecto
+%%
 figure('units','normalized','outerposition',[0 0 1 1])
 plot(entradas,salidas,'g');grid on;hold on;
 plot(entradas,Y,'ro');
 title(['Comportamiento de la RNA con feedforwardnet'])
-xlabel('x');ylabel('Y = x^3')
-
+xlabel('x');ylabel('Y:=Función desconocida')
+%%
+% Sin embargo, como se puede apreciar, la red no produce los resultados esperados. Para poder lograrlos, es posible sintonizar la
+% red mediante funciones y otros parámetros.
+%
+% La red acepta  varias funciones de entrenamiento a saber.
+%%
 FunTra=char('trainlm','trainbfg','trainrp','traingda');
-%NumCap=100; -> Usado para feedforwardnet
+%% Trainlm
+%
+% Trainlm es una función de entrenamiento en red que actualiza los valores de peso y sesgo según la optimización de
+% Levenberg-Marquadt. Es a menudo el algoritmo backpropagation más rápido, y es altamente recomendable como un algoritmo
+% supervisado de primera elección, aunque requiere más memoria que otros algoritmos.
+%
+% Trainlm admite la formación con vectores de validación y prueba si la propiedad NET.divideFcn de la red se establece en una
+% función de división de datos. Los vectores de validación se usan para detener el entrenamiento temprano si el rendimiento de la
+% red en los vectores de validación no mejora o sigue siendo el mismo para las épocas max_fail en una fila. Los vectores de prueba
+% se utilizan como una comprobación adicional de que la red está generalizando bien, pero no tienen ningún efecto en el
+% entrenamiento
+%
+% Trainlm puede entrenar cualquier red siempre y cuando su peso, su entrada neta y sus funciones de transferencia tengan funciones
+% derivadas.
+%
+% Backpropagation se utiliza para calcular la JX de rendimiento Jacobiano con respecto a las variables de peso y sesgo X. Cada
+% variable se ajusta de acuerdo con Levenberg-Marquardt,
+%
+% Jj = jX * jX
+% Je = jX * E
+% DX = - (jj + I * mu) \ je
+%
+% Donde E es todo error e I es la matriz de identidad.
+%
+% El valor de adaptación mu se incrementa en mu_inc hasta que el cambio anterior da como resultado un valor de rendimiento
+% reducido. El cambio entonces se hace a la red y mu se disminuye por mu_dec.
+%
+% El entrenamiento se detiene cuando ocurre cualquiera de estas condiciones:
+%
+% * Se alcanza el número máximo de épocas (repeticiones).
+% * Se excede la cantidad máxima de tiempo.
+% * El rendimiento se reduce al mínimo a la meta.
+% * El gradiente de rendimiento cae por debajo de min_grad.
+% * Mu supera mu_max.
+% * El rendimiento de validación ha aumentado más de max_fail veces desde la última vez que disminuyó (al usar la validación).
+%%
+%% Pruebas
+%
+% El siguiente algoritmo establece diferentes combinaciones para lograr la mejor solución. Se deja al lector la ejecución para
+% encontrar la red. La gráfica de salida de la red es:
+% 
+% <<../final.png>>
+% 
+%%
+return
 NumIter=1000;
 ParObj=0.001;
 ParObjini=0.001;
@@ -53,7 +104,7 @@ i=1;%Contador general
 j=1;%Contador de respuestas 
 ecm=zeros();
 minEcm=0.25;
-
+tic
 for ft=1:size(FunTra,1)
     for nl2=1:NumLy2
         for nl1=1+nl2:NumLy1
@@ -75,16 +126,13 @@ for ft=1:size(FunTra,1)
                             end
                             ecm(i)=d/l;
                             if ecm(i)<minEcm
-                                %AA(j,:)=[FunTra(ft,:),num2str(nl1),' ',num2str(nl2),' ',NeuMod(nml1,:),NeuMod(nml2,:)];
-                                [FunTra(ft,:),NeuMod(nml1,:),NeuMod(nml2,:)]
-                                [num2str(nl1),' ',num2str(nl2)]
                                 minEcm=ecm(i);
                                 figure('units','normalized','outerposition',[0 0 1 1])
                                 plot(entradas,salidas,'g');
                                 grid on;hold on;
                                 plot(entradas,Y,'ro');
-                                title(['Comportamiento de la RNA con feedforwardnet, numero de ca ', num2str(i)]);
-                                xlabel('x');ylabel('Y = x^3');
+                                title(['RNA con feedforwardnet con ',num2str(nl1),' capas tipo ', NeuMod(nml1,:),', ',num2str(nl2),' capas tipo ',NeuMod(nml2,:),' y función de entrenamiento ',FunTra(ft,:)]);
+                                xlabel('x');ylabel('Y');
                                 j=j+1;
                             end
                             i=i+1;
@@ -95,43 +143,7 @@ for ft=1:size(FunTra,1)
         end
     end
 end
-return;
- 
-
-
-
-
-
-perf=zeros();
-for i=1:1:50
-    desc = feedforwardnet(i);
-    desc.trainParam.epochs=10000;
-    %desc.trainParam.goal=0.0001;
-    [desc,tr] = train(desc,entradas,salidas);
-    y=desc(entradas);
-    Y = sim(desc,entradas);
-    
-    l=size(Y,2);
-    d=0;
-    for j=1:l
-        d=d+(Y(j)-salidas(j))^2;
-    end
-    ecm(i)=d/l;
-    if ecm(i)<0.06
-        figure('units','normalized','outerposition',[0 0 1 1])
-        plot(entradas,salidas,'g');
-        grid on;
-        hold on;
-        plot(entradas,Y,'ro');
-        title(['Comportamiento de la RNA con feedforwardnet, numero de capas= ', num2str(i)])
-        xlabel('x')
-        ylabel('Y = x^3')
-        perf(i) = perform(desc,y,salidas);
-    end
-    %%
-
-    desc=zeros();
-end
+toc
 
 %% Conclusiones
 % # Se hicieron variaciones con las entradas para determinar cual da el mejor entrenamiento. Entre más pasos tengan las entradas y

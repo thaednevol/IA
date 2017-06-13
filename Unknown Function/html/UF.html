@@ -1,0 +1,291 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GRAFICA DE LA FUNCI&Oacute;N DESCONOCIDA MEDIANTE UNA RNA</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-12"><meta name="DC.source" content="UF.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>GRAFICA DE LA FUNCI&Oacute;N DESCONOCIDA MEDIANTE UNA RNA</h1><!--introduction--><p>Utilizar los comandos de MATLAB para realizar el entrenamiento y la posterior validaci&oacute;n de la RNA que genere la respuesta de una funci&oacute;n desconocida, mediante MATLAB</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Funci&oacute;n feedforwardnet</a></li><li><a href="#3">Problema</a></li><li><a href="#4">Solucion</a></li><li><a href="#10">Trainlm</a></li><li><a href="#12">Pruebas</a></li><li><a href="#14">Conclusiones</a></li></ul></div><h2 id="1">Funci&oacute;n feedforwardnet</h2><p>Las redes feedforward consisten en una serie de capas. La primera capa tiene una conexi&oacute;n desde la entrada de red. Cada capa posterior tiene una conexi&oacute;n de la capa anterior. La capa final produce la salida de la red.</p><p>Las redes Feedforward se pueden utilizar para cualquier tipo de mapeo de entrada a salida. Una red feedforward con una capa oculta y suficientes neuronas en las capas ocultas, puede adaptarse a cualquier problema de mapeo de entrada-salida finito.</p><p>Las versiones especializadas de la red feedforward incluyen redes de ajuste (fitnet) y reconocimiento de patrones (patternnet). Una variaci&oacute;n en la red de feedforward es la red en cascada (cascadeforwardnet) que tiene conexiones adicionales desde la entrada a cada capa, y de cada capa a todas las capas siguientes.</p><h2 id="3">Problema</h2><p>Encontrar una red neural que permita la soluci&oacute;n de tener las siguientes entradas y salidas</p><pre class="codeinput">entradas =-20:1:20;
+sal1=[0.0875,0.0002,0.0366,0.3178 0.8151 1.2631 1.1523 -0.4252 0.5477 1.2055 1.2309 0.7715 0.2621 0.0223 -0.0014 -0.1190 -0.5309 -1.0681 -1.2961 -0.9002];
+sal2=[0 0.9002 -1.2961 1.0681 0.5309 0.1190 0.0014 -0.0223 -0.2621 -0.7715 -1.2309 -1.2055 -0.5477 0.4252 1.1523 1.2631 0.8151 0.3178  0.0366  0.0002  0.0875];
+salidas = [ sal1 sal2 ];
+</pre><h2 id="4">Solucion</h2><p>La forma b&aacute;sica de definici&oacute;n y entrenamiento de la red es:</p><pre class="codeinput">desc = feedforwardnet;
+[desc,tr] = train(desc,entradas,salidas);
+Y = sim(desc,entradas);
+</pre><pre>donde feedforward toma como par&aacute;metros el n&uacute;mero de capas ocultas que por defecto son 10 y el n&uacute;mero la funci&oacute;n de
+entrenamiento, la que por defecto es trainlm</pre><p>Se grafican la salida deseada con la obtenida por defecto</p><pre class="codeinput">figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+plot(entradas,salidas,<span class="string">'g'</span>);grid <span class="string">on</span>;hold <span class="string">on</span>;
+plot(entradas,Y,<span class="string">'ro'</span>);
+title([<span class="string">'Comportamiento de la RNA con feedforwardnet'</span>])
+xlabel(<span class="string">'x'</span>);ylabel(<span class="string">'Y:=Funci&oacute;n desconocida'</span>)
+</pre><img vspace="5" hspace="5" src="UF_01.png" alt=""> <p>Sin embargo, como se puede apreciar, la red no produce los resultados esperados. Para poder lograrlos, es posible sintonizar la red mediante funciones y otros par&aacute;metros.</p><p>La red acepta  varias funciones de entrenamiento a saber.</p><pre class="codeinput">FunTra=char(<span class="string">'trainlm'</span>,<span class="string">'trainbfg'</span>,<span class="string">'trainrp'</span>,<span class="string">'traingda'</span>);
+</pre><h2 id="10">Trainlm</h2><p>Trainlm es una funci&oacute;n de entrenamiento en red que actualiza los valores de peso y sesgo seg&uacute;n la optimizaci&oacute;n de Levenberg-Marquadt. Es a menudo el algoritmo backpropagation m&aacute;s r&aacute;pido, y es altamente recomendable como un algoritmo supervisado de primera elecci&oacute;n, aunque requiere m&aacute;s memoria que otros algoritmos.</p><p>Trainlm admite la formaci&oacute;n con vectores de validaci&oacute;n y prueba si la propiedad NET.divideFcn de la red se establece en una funci&oacute;n de divisi&oacute;n de datos. Los vectores de validaci&oacute;n se usan para detener el entrenamiento temprano si el rendimiento de la red en los vectores de validaci&oacute;n no mejora o sigue siendo el mismo para las &eacute;pocas max_fail en una fila. Los vectores de prueba se utilizan como una comprobaci&oacute;n adicional de que la red est&aacute; generalizando bien, pero no tienen ning&uacute;n efecto en el entrenamiento</p><p>Trainlm puede entrenar cualquier red siempre y cuando su peso, su entrada neta y sus funciones de transferencia tengan funciones derivadas.</p><p>Backpropagation se utiliza para calcular la JX de rendimiento Jacobiano con respecto a las variables de peso y sesgo X. Cada variable se ajusta de acuerdo con Levenberg-Marquardt,</p><p>Jj = jX * jX Je = jX * E DX = - (jj + I * mu) \ je</p><p>Donde E es todo error e I es la matriz de identidad.</p><p>El valor de adaptaci&oacute;n mu se incrementa en mu_inc hasta que el cambio anterior da como resultado un valor de rendimiento reducido. El cambio entonces se hace a la red y mu se disminuye por mu_dec.</p><p>El entrenamiento se detiene cuando ocurre cualquiera de estas condiciones:</p><div><ul><li>Se alcanza el n&uacute;mero m&aacute;ximo de &eacute;pocas (repeticiones).</li><li>Se excede la cantidad m&aacute;xima de tiempo.</li><li>El rendimiento se reduce al m&iacute;nimo a la meta.</li><li>El gradiente de rendimiento cae por debajo de min_grad.</li><li>Mu supera mu_max.</li><li>El rendimiento de validaci&oacute;n ha aumentado m&aacute;s de max_fail veces desde la &uacute;ltima vez que disminuy&oacute; (al usar la validaci&oacute;n).</li></ul></div><h2 id="12">Pruebas</h2><p>El siguiente algoritmo establece diferentes combinaciones para lograr la mejor soluci&oacute;n. Se deja al lector la ejecuci&oacute;n para encontrar la red. La gr&aacute;fica de salida de la red es:</p><p><img vspace="5" hspace="5" src="../final.png" alt=""> </p><pre class="codeinput"><span class="keyword">return</span>
+NumIter=1000;
+ParObj=0.001;
+ParObjini=0.001;
+MSEobj=0.05;
+NumLy1=round(size(entradas,2)/3);
+NumLy2=1;
+NeuMod=char(<span class="string">'tansig'</span>,<span class="string">'purelin'</span>,<span class="string">'logsig'</span>);
+i=1;<span class="comment">%Contador general</span>
+j=1;<span class="comment">%Contador de respuestas</span>
+ecm=zeros();
+minEcm=0.25;
+tic
+<span class="keyword">for</span> ft=1:size(FunTra,1)
+    <span class="keyword">for</span> nl2=1:NumLy2
+        <span class="keyword">for</span> nl1=1+nl2:NumLy1
+            <span class="keyword">for</span> nml1=1:size(NeuMod,1)
+                <span class="keyword">for</span> nml2=1:size(NeuMod,1)
+                    <span class="keyword">for</span> ni=NumIter:NumIter
+                        <span class="keyword">for</span> po=ParObjini:0.0001:ParObj
+                            <span class="comment">%desc = myFF(minmax(entradas),[nl1 nl2],{strtrim(NeuMod(nml1,:)) strtrim(NeuMod(nml2,:))},strtrim(FunTra(ft,:)));</span>
+                            descNet=myFF(minmax(entradas),nl1,nl2,strtrim(NeuMod(nml1,:)),strtrim(NeuMod(nml2,:)),strtrim(FunTra(ft,:)));
+                            descNet.trainParam.epochs = ni;
+                            descNet.trainParam.goal = po;
+                            descNet.trainParam.showWindow=0;
+                            [descOut,tr] = train(descNet,entradas,salidas);
+                            Y = sim(descOut,entradas);
+                            l=size(Y,2);
+                            d=0;
+                            <span class="keyword">for</span> j=1:l
+                                d=d+(Y(j)-salidas(j))^2;
+                            <span class="keyword">end</span>
+                            ecm(i)=d/l;
+                            <span class="keyword">if</span> ecm(i)&lt;minEcm
+                                minEcm=ecm(i);
+                                figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+                                plot(entradas,salidas,<span class="string">'g'</span>);
+                                grid <span class="string">on</span>;hold <span class="string">on</span>;
+                                plot(entradas,Y,<span class="string">'ro'</span>);
+                                title([<span class="string">'RNA con feedforwardnet con '</span>,num2str(nl1),<span class="string">' capas tipo '</span>, NeuMod(nml1,:),<span class="string">', '</span>,num2str(nl2),<span class="string">' capas tipo '</span>,NeuMod(nml2,:),<span class="string">' y funci&oacute;n de entrenamiento '</span>,FunTra(ft,:)]);
+                                xlabel(<span class="string">'x'</span>);ylabel(<span class="string">'Y'</span>);
+                                j=j+1;
+                            <span class="keyword">end</span>
+                            i=i+1;
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+toc
+</pre><h2 id="14">Conclusiones</h2><div><ol><li>Se hicieron variaciones con las entradas para determinar cual da el mejor entrenamiento. Entre m&aacute;s pasos tengan las entradas y las salidas, una mejor correspondencia se tiene de la red.</li><li>Con los valores iniciales de entrada y salida, no se puede concluir con cuantas capas la red es &oacute;ptima. Si se introducen m&aacute;s pasos, a partir de 2 capas la red tiene buenos resultados</li><li>Es necesario evaluar m&aacute;s funciones de transferencia, n&uacute;mero de iteraciones, funciones de entrenamiento, entre otros par&aacute;metros</li></ol></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% GRAFICA DE LA FUNCIÓN DESCONOCIDA MEDIANTE UNA RNA
+%
+% Utilizar los comandos de MATLAB para realizar el entrenamiento y la posterior validación de la RNA que genere la respuesta de
+% una función desconocida, mediante MATLAB
+%%
+%% Función feedforwardnet
+%
+% Las redes feedforward consisten en una serie de capas. La primera capa tiene una conexión desde la entrada de red. Cada capa
+% posterior tiene una conexión de la capa anterior. La capa final produce la salida de la red.
+% 
+% Las redes Feedforward se pueden utilizar para cualquier tipo de mapeo de entrada a salida. Una red feedforward con una capa
+% oculta y suficientes neuronas en las capas ocultas, puede adaptarse a cualquier problema de mapeo de entrada-salida finito.
+% 
+% Las versiones especializadas de la red feedforward incluyen redes de ajuste (fitnet) y reconocimiento de patrones (patternnet).
+% Una variación en la red de feedforward es la red en cascada (cascadeforwardnet) que tiene conexiones adicionales desde la
+% entrada a cada capa, y de cada capa a todas las capas siguientes.
+%%
+%% Problema
+%
+% Encontrar una red neural que permita la solución de tener las siguientes entradas y salidas
+entradas =-20:1:20;
+sal1=[0.0875,0.0002,0.0366,0.3178 0.8151 1.2631 1.1523 -0.4252 0.5477 1.2055 1.2309 0.7715 0.2621 0.0223 -0.0014 -0.1190 -0.5309 -1.0681 -1.2961 -0.9002];
+sal2=[0 0.9002 -1.2961 1.0681 0.5309 0.1190 0.0014 -0.0223 -0.2621 -0.7715 -1.2309 -1.2055 -0.5477 0.4252 1.1523 1.2631 0.8151 0.3178  0.0366  0.0002  0.0875];
+salidas = [ sal1 sal2 ]; 
+%% Solucion
+%
+% La forma básica de definición y entrenamiento de la red es:
+%
+%%
+desc = feedforwardnet;
+[desc,tr] = train(desc,entradas,salidas);
+Y = sim(desc,entradas);
+%%
+%  donde feedforward toma como parámetros el número de capas ocultas que por defecto son 10 y el número la función de
+%  entrenamiento, la que por defecto es trainlm
+%
+% Se grafican la salida deseada con la obtenida por defecto
+%%
+figure('units','normalized','outerposition',[0 0 1 1])
+plot(entradas,salidas,'g');grid on;hold on;
+plot(entradas,Y,'ro');
+title(['Comportamiento de la RNA con feedforwardnet'])
+xlabel('x');ylabel('Y:=Función desconocida')
+%%
+% Sin embargo, como se puede apreciar, la red no produce los resultados esperados. Para poder lograrlos, es posible sintonizar la
+% red mediante funciones y otros parámetros.
+%
+% La red acepta  varias funciones de entrenamiento a saber.
+%%
+FunTra=char('trainlm','trainbfg','trainrp','traingda');
+%% Trainlm
+%
+% Trainlm es una función de entrenamiento en red que actualiza los valores de peso y sesgo según la optimización de
+% Levenberg-Marquadt. Es a menudo el algoritmo backpropagation más rápido, y es altamente recomendable como un algoritmo
+% supervisado de primera elección, aunque requiere más memoria que otros algoritmos.
+%
+% Trainlm admite la formación con vectores de validación y prueba si la propiedad NET.divideFcn de la red se establece en una
+% función de división de datos. Los vectores de validación se usan para detener el entrenamiento temprano si el rendimiento de la
+% red en los vectores de validación no mejora o sigue siendo el mismo para las épocas max_fail en una fila. Los vectores de prueba
+% se utilizan como una comprobación adicional de que la red está generalizando bien, pero no tienen ningún efecto en el
+% entrenamiento
+%
+% Trainlm puede entrenar cualquier red siempre y cuando su peso, su entrada neta y sus funciones de transferencia tengan funciones
+% derivadas.
+%
+% Backpropagation se utiliza para calcular la JX de rendimiento Jacobiano con respecto a las variables de peso y sesgo X. Cada
+% variable se ajusta de acuerdo con Levenberg-Marquardt,
+%
+% Jj = jX * jX
+% Je = jX * E
+% DX = - (jj + I * mu) \ je
+%
+% Donde E es todo error e I es la matriz de identidad.
+%
+% El valor de adaptación mu se incrementa en mu_inc hasta que el cambio anterior da como resultado un valor de rendimiento
+% reducido. El cambio entonces se hace a la red y mu se disminuye por mu_dec.
+%
+% El entrenamiento se detiene cuando ocurre cualquiera de estas condiciones:
+%
+% * Se alcanza el número máximo de épocas (repeticiones).
+% * Se excede la cantidad máxima de tiempo.
+% * El rendimiento se reduce al mínimo a la meta.
+% * El gradiente de rendimiento cae por debajo de min_grad.
+% * Mu supera mu_max.
+% * El rendimiento de validación ha aumentado más de max_fail veces desde la última vez que disminuyó (al usar la validación).
+%%
+%% Pruebas
+%
+% El siguiente algoritmo establece diferentes combinaciones para lograr la mejor solución. Se deja al lector la ejecución para
+% encontrar la red. La gráfica de salida de la red es:
+% 
+% <<../final.png>>
+% 
+%%
+return
+NumIter=1000;
+ParObj=0.001;
+ParObjini=0.001;
+MSEobj=0.05;
+NumLy1=round(size(entradas,2)/3);
+NumLy2=1;
+NeuMod=char('tansig','purelin','logsig');
+i=1;%Contador general
+j=1;%Contador de respuestas 
+ecm=zeros();
+minEcm=0.25;
+tic
+for ft=1:size(FunTra,1)
+    for nl2=1:NumLy2
+        for nl1=1+nl2:NumLy1
+            for nml1=1:size(NeuMod,1)
+                for nml2=1:size(NeuMod,1)
+                    for ni=NumIter:NumIter
+                        for po=ParObjini:0.0001:ParObj
+                            %desc = myFF(minmax(entradas),[nl1 nl2],{strtrim(NeuMod(nml1,:)) strtrim(NeuMod(nml2,:))},strtrim(FunTra(ft,:)));
+                            descNet=myFF(minmax(entradas),nl1,nl2,strtrim(NeuMod(nml1,:)),strtrim(NeuMod(nml2,:)),strtrim(FunTra(ft,:)));
+                            descNet.trainParam.epochs = ni;
+                            descNet.trainParam.goal = po;
+                            descNet.trainParam.showWindow=0; 
+                            [descOut,tr] = train(descNet,entradas,salidas);
+                            Y = sim(descOut,entradas);
+                            l=size(Y,2);
+                            d=0;
+                            for j=1:l
+                                d=d+(Y(j)-salidas(j))^2;
+                            end
+                            ecm(i)=d/l;
+                            if ecm(i)<minEcm
+                                minEcm=ecm(i);
+                                figure('units','normalized','outerposition',[0 0 1 1])
+                                plot(entradas,salidas,'g');
+                                grid on;hold on;
+                                plot(entradas,Y,'ro');
+                                title(['RNA con feedforwardnet con ',num2str(nl1),' capas tipo ', NeuMod(nml1,:),', ',num2str(nl2),' capas tipo ',NeuMod(nml2,:),' y función de entrenamiento ',FunTra(ft,:)]);
+                                xlabel('x');ylabel('Y');
+                                j=j+1;
+                            end
+                            i=i+1;
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+toc
+
+%% Conclusiones
+% # Se hicieron variaciones con las entradas para determinar cual da el mejor entrenamiento. Entre más pasos tengan las entradas y
+% las salidas, una mejor correspondencia se tiene de la red.
+% # Con los valores iniciales de entrada y salida, no se puede concluir con cuantas capas la red es óptima. Si se introducen
+% más pasos, a partir de 2 capas la red tiene buenos resultados
+% # Es necesario evaluar más funciones de transferencia, número de iteraciones, funciones de entrenamiento, entre otros parámetros
+##### SOURCE END #####
+--></body></html>
